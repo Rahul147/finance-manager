@@ -10,11 +10,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_11_14_151350) do
+ActiveRecord::Schema[8.1].define(version: 2025_11_15_051712) do
   create_table "email_accounts", force: :cascade do |t|
     t.text "access_token"
     t.datetime "created_at", null: false
-    t.string "email", null: false
+    t.string "email_address", null: false
     t.datetime "expires_at"
     t.string "provider", null: false
     t.string "provider_account_id", null: false

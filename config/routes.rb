@@ -1,6 +1,12 @@
 Rails.application.routes.draw do
   resource :session
   resources :passwords, param: :token
+
+  # We'll allow only `google` as the provider for now
+  scope :oauth, constraints: { provider: /google/ } do
+    get "/:provider/start",    to: "email_provider_oauths#start",    as: :oauth_start
+    get "/:provider/callback", to: "email_provider_oauths#callback", as: :oauth_callback
+  end
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
