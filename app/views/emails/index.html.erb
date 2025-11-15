@@ -1,11 +1,82 @@
-<!-- app/views/emails/index.html.erb -->
-<h1>Emails</h1>
-<ul>
-  <% @emails.each do |email| %>
-    <li>
-      <%= link_to(email.subject.presence || "(no subject)", email_path(email)) %>
-      — <%= email.from_address %>
-      — <%= email.sent_at&.to_formatted_s(:db) %>
-    </li>
-  <% end %>
-</ul>
+<!-- Root Emails listing page -->
+<div class="min-h-screen bg-[#efe6d7]">
+  <div class="max-w-7xl mx-auto px-5 py-8 md:py-12">
+    <% user_name = (Current.user&.email_address.to_s.split("@").first&.capitalize.presence || "there") %>
+    <h1 class="text-3xl md:text-5xl font-extrabold tracking-tight">
+      Hey there <span class="inline-block"><%= user_name %></span> <span class="align-[-2px]">✨</span>
+    </h1>
+    <p class="mt-2 text-slate-500">
+      This will be a description if we need one just to make this entire thing look better.
+    </p>
+
+    <!-- Search + filter row -->
+    <div class="mt-6 flex items-center gap-3">
+      <div class="relative flex-1">
+        <span class="absolute inset-y-0 left-3 flex items-center text-slate-400">
+          <!-- magnifier -->
+          <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 105.1 5.1a7.5 7.5 0 0011.55 11.55z" />
+          </svg>
+        </span>
+        <input
+          type="search"
+          placeholder="Search emails"
+          class="w-full rounded-xl border-2 border-black bg-white px-10 py-3 text-sm placeholder-slate-400 shadow-[0_6px_0_#000] focus:outline-none focus:ring-0 focus:shadow-[0_8px_0_#000]">
+      </div>
+      <button type="button" class="rounded-xl border-2 border-black bg-violet-400 px-4 py-3 text-white font-semibold shadow-[0_6px_0_#000] hover:bg-violet-500 active:translate-y-[2px] active:shadow-[0_4px_0_#000]">
+        <!-- simple funnel icon -->
+        <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M3 5h18M6 12h12M10 19h4"/>
+        </svg>
+      </button>
+      
+    </div>
+
+    <!-- Card/table -->
+    <div class="relative mt-6 rounded-2xl border-2 border-black bg-[#fdebd0] shadow-[10px_10px_0_#000]">
+      <div class="overflow-x-auto rounded-2xl">
+        <table class="min-w-full text-sm">
+          <thead class="bg-white border-b-2 border-black">
+            <tr>
+              <th class="px-4 py-3 text-left font-semibold">Subject</th>
+              <th class="px-4 py-3 text-left font-semibold">From</th>
+              <th class="px-4 py-3 text-left font-semibold">Sent</th>
+              <th class="px-4 py-3 text-left font-semibold">Snippet</th>
+              <th class="px-4 py-3 text-left font-semibold">File Link</th>
+              <th class="px-4 py-3 text-left font-semibold">Starred</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @emails.first(25).each do |email| %>
+              <tr class="border-t border-black/20">
+                <td class="px-4 py-3">
+                  <%= link_to (email.subject.presence || "(no subject)"),
+                              email_path(email),
+                              class: "text-blue-700 hover:underline font-medium" %>
+                </td>
+                <td class="px-4 py-3 text-slate-700"><%= email.from_address %></td>
+                <td class="px-4 py-3 text-slate-700"><%= email.sent_at&.to_fs(:short) %></td>
+                <td class="px-4 py-3 text-slate-600"><%= truncate(email.snippet.to_s, length: 50) %></td>
+                <td class="px-4 py-3">
+                  <%= link_to "Open", email_path(email), class: "text-blue-700 hover:underline" %>
+                </td>
+                <td class="px-4 py-3">
+                  <span class="text-orange-500">❤</span>
+                </td>
+              </tr>
+            <% end %>
+            <% if @emails.blank? %>
+              <tr>
+                <td colspan="6" class="px-4 py-8 text-center text-slate-500">
+                  No emails yet.
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+
+      <%# Pagination hidden for now %>
+    </div>
+  </div>
+</div>
