@@ -1,0 +1,39 @@
+<div class="relative mt-6 rounded-2xl border-2 border-black bg-[#fdebd0] shadow-[10px_10px_0_#000]">
+  <div class="overflow-x-auto rounded-2xl">
+    <table class="min-w-full text-sm">
+      <thead class="bg-white border-b-2 border-black">
+        <tr>
+          <th class="px-4 py-3 text-left font-semibold">Date</th>
+          <th class="px-4 py-3 text-left font-semibold">Merchant</th>
+          <th class="px-4 py-3 text-left font-semibold">Category</th>
+          <th class="px-4 py-3 text-left font-semibold">Amount</th>
+          <th class="px-4 py-3 text-left font-semibold">Status</th>
+          <th class="px-4 py-3 text-left font-semibold">Email</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% transactions.each do |t| %>
+          <tr class="border-t border-black/20">
+            <td class="px-4 py-3 text-slate-700"><%= (t.transaction_date || t.created_at.to_date) %></td>
+            <td class="px-4 py-3 text-slate-700"><%= t.merchant.presence || "(unknown)" %></td>
+            <td class="px-4 py-3 text-slate-700"><%= t.category %></td>
+            <td class="px-4 py-3 text-slate-700">
+              <%= number_to_currency(t.amount_cents.to_i / 100.0, unit: (t.currency.presence || "₹")) %>
+            </td>
+            <td class="px-4 py-3 text-slate-700"><%= t.status %></td>
+            <td class="px-4 py-3">
+              <%= link_to "Open", email_path(t.email), class: "text-blue-700 hover:underline", data: { turbo_frame: "_top" } %>
+            </td>
+          </tr>
+        <% end %>
+        <% if transactions.blank? %>
+          <tr>
+            <td colspan="6" class="px-4 py-8 text-center text-slate-500">
+              No transactions yet.
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>
