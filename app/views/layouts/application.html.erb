@@ -24,16 +24,17 @@
   </head>
 
   <body>
-  <nav>
-    
-    <% if authenticated? %>
-    <%= link_to "Home", root_path %>
-      <%= button_to "Log out", session_path, method: :delete %>
-      <% unless google_connected? %>
-        <%= link_to "Connect Google", oauth_start_path(provider: "google") %>
+  <nav class="relative">
+    <%= render "shared/navbar" %>
+    <div class="hidden">
+      <% if authenticated? %>
+        <%= link_to "Home", root_path %>
+        <%= button_to "Log out", session_path, method: :delete %>
+        <% unless google_connected? %>
+          <%= link_to "Connect Google", oauth_start_path(provider: "google") %>
+        <% end %>
       <% end %>
-    <% end %>
-  
+    </div>
   </nav>
     <main>
       <%= yield %>
