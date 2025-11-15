@@ -1,0 +1,11 @@
+<!-- app/views/emails/show.html.erb -->
+<h1><%= @email.subject.presence || "(no subject)" %></h1>
+<p><strong>From:</strong> <%= @email.from_address %></p>
+<p><strong>To:</strong> <%= @email.to_address %></p>
+<p><strong>Sent at:</strong> <%= @email.sent_at&.strftime("%F %T") %></p>
+
+<hr>
+<h3>Text</h3>
+<%= @email.body_text %>
+
+<p><strong>Sent at:</strong> <%= @email.sent_at&.strftime("%F %T") %></p>

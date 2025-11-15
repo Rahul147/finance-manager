@@ -1,0 +1,11 @@
+<!-- app/views/emails/index.html.erb -->
+<h1>Emails</h1>
+<ul>
+  <% @emails.each do |email| %>
+    <li>
+      <%= link_to(email.subject.presence || "(no subject)", email_path(email)) %>
+      — <%= email.from_address %>
+      — <%= email.sent_at&.to_formatted_s(:db) %>
+    </li>
+  <% end %>
+</ul>

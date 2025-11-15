@@ -2,6 +2,8 @@ Rails.application.routes.draw do
   resource :session
   resources :passwords, param: :token
 
+  resources :emails, only: [:index, :show], path: "email"
+
   # We'll allow only `google` as the provider for now
   scope :oauth, constraints: { provider: /google/ } do
     get "/:provider/start",    to: "email_provider_oauths#start",    as: :oauth_start
@@ -18,5 +20,5 @@ Rails.application.routes.draw do
   # get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
 
   # Defines the root path route ("/")
-  # root "posts#index"
+  root "emails#index"
 end
