@@ -1,0 +1,14 @@
+<h1 class="text-2xl font-bold mb-4">Transaction</h1>
+
+<div class="space-y-2">
+  <div><strong>Date:</strong> <%= @transaction.transaction_date || @transaction.created_at.to_date %></div>
+  <div><strong>Merchant:</strong> <%= @transaction.merchant %></div>
+  <div><strong>Category:</strong> <%= @transaction.category %></div>
+  <div><strong>Amount:</strong>
+    <%= number_to_currency(@transaction.amount_cents.to_i / 100.0, unit: (@transaction.currency.presence || "₹")) %>
+  </div>
+  <div><strong>Status:</strong> <%= @transaction.status %></div>
+  <div><strong>Notes:</strong> <%= simple_format(@transaction.notes) %></div>
+  <div><strong>Metadata:</strong> <pre class="whitespace-pre-wrap"><%= @transaction.metadata %></pre></div>
+  <div><strong>Email:</strong> <%= link_to "View email", email_path(@transaction.email), class: "text-blue-700 hover:underline" %></div>
+</div>
