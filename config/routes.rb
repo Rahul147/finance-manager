@@ -4,8 +4,8 @@ Rails.application.routes.draw do
   resource :session
   resources :passwords, param: :token
 
-  resources :emails, only: [:index, :show], path: "email"
-  resources :transactions, only: [:index, :show]
+  resources :emails, only: [ :index, :show ], path: "email"
+  resources :transactions, only: [ :index, :show ]
 
   # We'll allow only `google` as the provider for now
   scope :oauth, constraints: { provider: /google/ } do
