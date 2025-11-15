@@ -25,7 +25,10 @@
 
   <body>
   <nav class="relative">
-    <%= render "shared/navbar" %>
+    <% if authenticated? %>
+      <%= render "shared/navbar" %>
+    <% end %>
+    
     <div class="hidden">
       <% if authenticated? %>
         <%= link_to "Home", root_path %>
