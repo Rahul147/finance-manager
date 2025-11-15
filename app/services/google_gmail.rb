@@ -50,7 +50,7 @@ module GoogleGmail
         headers: headers.to_json,
         processed: false
       )
-      # ExtractTransactionFromEmailJob.perform_later(email.id)
+      ExtractTransactionFromEmailJob.perform_later(email.id)
       created += 1
     end
   end

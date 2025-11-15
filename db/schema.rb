@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_11_15_074434) do
+ActiveRecord::Schema[8.1].define(version: 2025_11_15_110941) do
   create_table "email_accounts", force: :cascade do |t|
     t.text "access_token"
     t.datetime "created_at", null: false
@@ -57,6 +57,23 @@ ActiveRecord::Schema[8.1].define(version: 2025_11_15_074434) do
     t.index ["user_id"], name: "index_sessions_on_user_id"
   end
 
+  create_table "transactions", force: :cascade do |t|
+    t.integer "amount_cents"
+    t.string "category"
+    t.datetime "created_at", null: false
+    t.string "currency"
+    t.integer "email_id", null: false
+    t.string "merchant"
+    t.text "metadata"
+    t.text "notes"
+    t.string "status"
+    t.date "transaction_date"
+    t.datetime "updated_at", null: false
+    t.integer "user_id", null: false
+    t.index ["email_id"], name: "index_transactions_on_email_id"
+    t.index ["user_id"], name: "index_transactions_on_user_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "email_address", null: false
@@ -69,4 +86,6 @@ ActiveRecord::Schema[8.1].define(version: 2025_11_15_074434) do
   add_foreign_key "emails", "email_accounts"
   add_foreign_key "emails", "users"
   add_foreign_key "sessions", "users"
+  add_foreign_key "transactions", "emails"
+  add_foreign_key "transactions", "users"
 end
