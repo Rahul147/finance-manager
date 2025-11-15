@@ -16,10 +16,6 @@ class EmailProviderOauthsController < ApplicationController
 
   def callback
     unless params[:state] == session.delete(:google_oauth_state)
-      Rails.logger.info(
-        "OAuth DEBUG → base_url=#{request.base_url} " \
-        "state_param=#{params[:state]} stored_state=#{stored}"
-      )
       return redirect_to root_path, alert: "Invalid OAuth state."
     end
 
