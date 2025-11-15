@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_11_15_051712) do
+ActiveRecord::Schema[8.1].define(version: 2025_11_15_074434) do
   create_table "email_accounts", force: :cascade do |t|
     t.text "access_token"
     t.datetime "created_at", null: false
@@ -26,6 +26,26 @@ ActiveRecord::Schema[8.1].define(version: 2025_11_15_051712) do
     t.integer "user_id", null: false
     t.index ["provider", "provider_account_id"], name: "index_email_accounts_on_provider_and_provider_account_id", unique: true
     t.index ["user_id"], name: "index_email_accounts_on_user_id"
+  end
+
+  create_table "emails", force: :cascade do |t|
+    t.text "body_html"
+    t.text "body_text"
+    t.datetime "created_at", null: false
+    t.integer "email_account_id", null: false
+    t.string "from_address"
+    t.text "headers"
+    t.string "message_id"
+    t.boolean "processed"
+    t.datetime "sent_at"
+    t.text "snippet"
+    t.string "subject"
+    t.string "thread_id"
+    t.string "to_address"
+    t.datetime "updated_at", null: false
+    t.integer "user_id", null: false
+    t.index ["email_account_id"], name: "index_emails_on_email_account_id"
+    t.index ["user_id"], name: "index_emails_on_user_id"
   end
 
   create_table "sessions", force: :cascade do |t|
@@ -46,5 +66,7 @@ ActiveRecord::Schema[8.1].define(version: 2025_11_15_051712) do
   end
 
   add_foreign_key "email_accounts", "users"
+  add_foreign_key "emails", "email_accounts"
+  add_foreign_key "emails", "users"
   add_foreign_key "sessions", "users"
 end

@@ -42,7 +42,7 @@ class EmailProviderOauthsController < ApplicationController
     acct.expires_at     = Time.current + token["expires_in"].to_i.seconds if token["expires_in"]
     acct.scope          = token["scope"] if token["scope"]
     acct.token_type     = token["token_type"] if token["token_type"]
-    
+
     acct.save!
 
     redirect_to root, notice: "Google account linked."

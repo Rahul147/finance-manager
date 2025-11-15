@@ -5,4 +5,8 @@ class EmailAccount < ApplicationRecord
   validates :email_address, presence: true
   validates :provider, presence: true
   validates :provider_account_id, presence: true, uniqueness: { scope: :provider }
+
+  def expired?
+    expires_at.present? && Time.current >= expires_at
+  end
 end
