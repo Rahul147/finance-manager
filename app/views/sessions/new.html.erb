@@ -3,11 +3,6 @@
   <%= image_tag "coin.svg", class: "absolute top-10 hidden md:block 2xl:right-1/8 right-1/10 xl:right-20 rotate-[20deg] md:right-0 md:w-[400px] xl:w-[300px] 2xl:w-[400px] h-auto pointer-events-none", alt: "Login decoration" %>
   
   <div class="w-full max-w-xl relative z-10">
-    <% if flash[:alert].present? %>
-      <div class="mb-4 rounded-lg border border-rose-200 bg-rose-50 px-4 py-3 text-rose-700 text-sm">
-        <%= flash[:alert] %>
-      </div>
-    <% end %>
     <% if flash[:notice].present? %>
       <div class="mb-4 rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 text-emerald-700 text-sm">
         <%= flash[:notice] %>
@@ -47,6 +42,11 @@
                   placeholder: "Enter password",
                   class: "mt-2 w-full font-mono rounded-lg border border-black bg-white/80 px-4 py-3 text-xs placeholder-slate-400 shadow-[5px_5px_0_0_rgba(0,0,0,0.9)] focus:outline-none focus:ring-0 transition" %>
           </div>
+          <% if flash[:alert].present? %>
+            <div class="rounded-lg border border-rose-200 bg-rose-50 px-4 py-3 text-rose-700 text-sm">
+              <%= flash[:alert] %>
+            </div>
+          <% end %>
 
           <div class="mt-4">
             <%= form.submit "Login",
