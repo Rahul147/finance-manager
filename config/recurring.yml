@@ -9,6 +9,13 @@
 #     priority: 2
 #     schedule: at 5am every day
 
+# config/recurring.yml
+development:
+  sync_email_accounts:
+    class: SyncEmailsJob
+    queue: default
+    schedule: every 5 minutes
+
 production:
   clear_solid_queue_finished_jobs:
     command: "SolidQueue::Job.clear_finished_in_batches(sleep_between_batches: 0.3)"
