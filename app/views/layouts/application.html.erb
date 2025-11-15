@@ -29,23 +29,15 @@
   </head>
 
   <body>
-  <nav class="relative">
+ <div class="flex">
+  <nav class="">
     <% if authenticated? %>
       <%= render "shared/navbar" %>
     <% end %>
-    
-    <div class="hidden">
-      <% if authenticated? %>
-        <%= link_to "Home", root_path %>
-        <%= button_to "Log out", session_path, method: :delete %>
-        <% unless google_connected? %>
-          <%= link_to "Connect Google", oauth_start_path(provider: "google") %>
-        <% end %>
-      <% end %>
-    </div>
   </nav>
-    <main>
+    <main class="flex-1">
       <%= yield %>
     </main>
+ </div>
   </body>
 </html>
