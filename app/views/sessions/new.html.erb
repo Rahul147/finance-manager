@@ -1,5 +1,8 @@
-<div class="min-h-screen bg-[#efe6d7] flex items-center justify-center p-6">
-  <div class="w-full max-w-xl">
+<div class="min-h-screen bg-[#efe6d7] flex items-center justify-center md:p-0 p-4 relative overflow-hidden">
+  <%= image_tag "login.svg", class: "absolute bottom-0 md:-bottom-10 md:-left-10 xl:left-0 left-2 hidden md:block 2xl:left-20 left-2 2xl:w-[500px] w-[400px] h-auto pointer-events-none", alt: "Login decoration" %>
+  <%= image_tag "coin.svg", class: "absolute top-10 hidden md:block 2xl:right-1/8 right-1/10 xl:right-20 rotate-[20deg] md:right-0 md:w-[400px] xl:w-[300px] 2xl:w-[400px] h-auto pointer-events-none", alt: "Login decoration" %>
+  
+  <div class="w-full max-w-xl relative z-10">
     <% if flash[:alert].present? %>
       <div class="mb-4 rounded-lg border border-rose-200 bg-rose-50 px-4 py-3 text-rose-700 text-sm">
         <%= flash[:alert] %>
@@ -11,44 +14,52 @@
       </div>
     <% end %>
 
-    <div class="relative rounded-2xl bg-white shadow-[8px_8px_0_0_rgba(0,0,0,0.2)] ring-1 ring-black/5">
-      <div class="p-8 md:p-10">
-        <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight mb-2">Welcome Back</h1>
-        <p class="text-slate-500 text-sm md:text-[0.95rem]">
-          Please sign in to your account.
+    <div class="relative border-2 border-black rounded-2xl bg-white mx-auto max-w-[518px] shadow-[10px_12px_0_0_rgba(0,0,0,0.9)]  ">
+      <div class="py-8 px-6 md:p-10 2xl:px-10 2xl:py-14">
+        <h1 class="text-3xl font-bold tracking-tight mb-2.5 font-mono">Welcome Back</h1>
+        <p class="text-zinc-500 text-sm font-mono leading-[24px]">
+         Please sign in to your account. If you don’t have an account register with us now!
         </p>
 
-        <%= form_with url: session_path, html: { class: "mt-8 space-y-6" } do |form| %>
+        <%= form_with url: session_path, html: { class: "mt-6 flex flex-col gap-8" } do |form| %>
           <div>
-            <label class="block text-sm font-semibold text-slate-700">Username</label>
+            <label class="block font-mono text-sm font-normal text-rose-500">Username</label>
             <%= form.email_field :email_address,
                   required: true,
                   autofocus: true,
                   autocomplete: "username",
                   placeholder: "Enter username",
                   value: params[:email_address],
-                  class: "mt-2 w-full rounded-lg border-2 border-black bg-white/80 px-4 py-3 text-sm placeholder-slate-400 shadow-[0_6px_0_#000] focus:outline-none focus:ring-0 focus:shadow-[0_8px_0_#000] transition" %>
+                  class: "mt-2 w-full font-mono rounded-lg border border-black bg-white/80 px-4 py-3 text-xs placeholder-slate-400 shadow-[5px_5px_0_0_rgba(0,0,0,0.9)] focus:outline-none focus:ring-0 transition" %>
           </div>
 
           <div>
-            <label class="block text-sm font-semibold text-slate-700">Password</label>
+           <div class="flex items-center justify-between gap-4">
+            <label class="block font-mono text-sm font-normal text-rose-500">Password</label>
+             <div class="text-center font-mono">
+          <%= link_to "Forgot password?", new_password_path, class: "text-xs text-blue-600 hover:text-indigo-700 transition-colors transition-duration-300 underline underline-offset-2" %>
+        </div>
+           </div>
             <%= form.password_field :password,
                   required: true,
                   autocomplete: "current-password",
                   maxlength: 72,
                   placeholder: "Enter password",
-                  class: "mt-2 w-full rounded-lg border-2 border-black bg-white/80 px-4 py-3 text-sm placeholder-slate-400 shadow-[0_6px_0_#000] focus:outline-none focus:ring-0 focus:shadow-[0_8px_0_#000] transition" %>
+                  class: "mt-2 w-full font-mono rounded-lg border border-black bg-white/80 px-4 py-3 text-xs placeholder-slate-400 shadow-[5px_5px_0_0_rgba(0,0,0,0.9)] focus:outline-none focus:ring-0 transition" %>
           </div>
 
-          <div>
+          <div class="mt-4">
             <%= form.submit "Login",
-                  class: "w-full rounded-xl bg-rose-500 px-4 py-3 text-white font-semibold shadow-[0_8px_0_#000] hover:bg-rose-600 active:bg-rose-700 active:translate-y-[2px] active:shadow-[0_6px_0_#000] transition" %>
+                  class: "w-full font-mono rounded-xl cursor-pointer bg-rose-500 px-4 py-3 text-white font-semibold shadow-[5px_6px_0_0_rgba(0,0,0,0.9)] hover:bg-rose-600 active:bg-rose-700 active:translate-y-[2px] active:shadow-[6px_8px_0_0_rgba(0,0,0,0.9)] transition" %>
+          </div>
+
+          <div class="border-t-2 border-zinc-300 pt-6">
+            <%= form.submit "Sign Up" , disabled: true,
+                  class: "w-full font-mono rounded-xl disabled:bg-zinc-200 disabled:text-zinc-400 disabled:cursor-not-allowed cursor-pointer bg-yellow-200 px-4 py-3 text-black font-semibold shadow-[5px_6px_0_0_rgba(0,0,0,0.9)] hover:bg-yellow-300 active:bg-yellow-400 active:translate-y-[2px] active:shadow-[6px_8px_0_0_rgba(0,0,0,0.9)] transition" %>
           </div>
         <% end %>
 
-        <div class="mt-6 text-center">
-          <%= link_to "Forgot password?", new_password_path, class: "text-sm text-slate-600 hover:text-slate-900 underline underline-offset-2" %>
-        </div>
+       
       </div>
     </div>
   </div>
