@@ -3,7 +3,7 @@ class TransactionsController < ApplicationController
     scope = Transaction
       .where(user_id: Current.user.id)
       .includes(:email)
-    
+
     if (q = params[:q].to_s.strip).present?
       pattern = "%#{q.downcase}%"
       scope   = scope.where(
@@ -14,7 +14,7 @@ class TransactionsController < ApplicationController
 
     @transactions = scope
       .order(transaction_date: :desc, created_at: :desc)
-    
+
     if turbo_frame_request?
       render :index, layout: false
     end
