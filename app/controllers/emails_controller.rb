@@ -1,10 +1,12 @@
 # app/controllers/emails_controller.rb
 class EmailsController < ApplicationController
   def index
-    @emails = emails_scope
+    scoped_emails = emails_scope
+
+    @emails = scoped_emails
       .includes(:financial_transaction)
       .ordered_newest
-    @metrics = EmailMetrics.new(emails_scope)
+    @metrics = EmailMetrics.new(scoped_emails)
 
     render :index, layout: false if turbo_frame_request?
   end

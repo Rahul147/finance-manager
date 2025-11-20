@@ -1,4 +1,6 @@
 class EmailMetrics
+  DEFAULT_TOP_LIMIT = 4
+
   def initialize(relation)
     @relation = relation
   end
@@ -28,17 +30,24 @@ class EmailMetrics
   end
 
   def unique_senders
-    @unique_senders ||= relation.where.not(from_address: [ nil, "" ]).distinct.count(:from_address)
+    @unique_senders ||= relation
+      .where.not(from_address: [ nil, "" ])
+      .distinct
+      .count(:from_address)
   end
 
-  def top_senders(limit = 4)
-    @top_senders ||= relation
-      .where.not(from_address: [ nil, "" ])
-      .group(:from_address)
-      .order(Arel.sql("COUNT(*) DESC"))
-      .limit(limit)
-      .count
-      .to_a
+  def top_senders(limit = DEFAULT_TOP_LIMIT)
+    @top_senders ||= begin
+      limit_value = limit || DEFAULT_TOP_LIMIT
+
+      relation
+        .where.not(from_address: [ nil, "" ])
+        .group(:from_address)
+        .order(Arel.sql("COUNT(*) DESC"))
+        .limit(limit_value)
+        .count
+        .to_a
+    end
   end
 
   def latest_activity_at
