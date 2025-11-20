@@ -1,17 +1,13 @@
-<% emails = @emails.load %>
-<% total_emails = emails.size %>
-<% processed_count = emails.count(&:processed?) %>
-<% pending_count = total_emails - processed_count %>
-<% linked_transactions = emails.count { |email| email.financial_transaction.present? } %>
-<% linked_percentage = total_emails.positive? ? ((linked_transactions.to_f / total_emails) * 100).round : 0 %>
-<% processed_percentage = total_emails.positive? ? ((processed_count.to_f / total_emails) * 100).round : 0 %>
-<% unique_senders = emails.map { |email| email.from_address.presence }.compact.uniq.size %>
-<% last_synced_at = emails.first&.created_at || emails.first&.sent_at %>
-<% top_senders = emails
-     .map { |email| email.from_address.presence || "Unknown sender" }
-     .each_with_object(Hash.new(0)) { |sender, counts| counts[sender] += 1 }
-     .sort_by { |_, count| -count }
-     .first(4) %>
+<% metrics = @metrics %>
+<% total_emails = metrics.total %>
+<% processed_count = metrics.processed %>
+<% pending_count = metrics.pending %>
+<% linked_transactions = metrics.linked_transactions %>
+<% linked_percentage = metrics.linked_percentage %>
+<% processed_percentage = metrics.processed_percentage %>
+<% unique_senders = metrics.unique_senders %>
+<% last_synced_at = metrics.latest_activity_at %>
+<% top_senders = metrics.top_senders %>
 
 <div class="min-h-screen bg-[#efe6d7]">
   <div class="mx-auto max-w-6xl space-y-6 px-5 py-8 md:py-12">
@@ -113,7 +109,7 @@
     </div>
 
     <turbo-frame id="emails_list">
-      <%= render "emails/table", emails: emails %>
+      <%= render "emails/table", emails: @emails, latest_synced_at: last_synced_at %>
     </turbo-frame>
   </div>
 </div>

@@ -1,6 +1,7 @@
+<% emails = emails.to_a %>
+<% latest_timestamp = local_assigns.fetch(:latest_synced_at) { emails.first&.sent_at || emails.first&.created_at } %>
+
 <div class="relative mt-6 space-y-4 rounded-3xl border-2 border-black bg-[#fdebd0] p-5 shadow-[12px_12px_0_#000]">
-  <% latest_email = emails.first %>
-  <% latest_timestamp = latest_email&.sent_at || latest_email&.created_at %>
   <div class="flex flex-wrap items-center justify-between gap-3">
     <div>
       <p class="text-xs font-semibold uppercase tracking-[0.25em] text-slate-500">Inbox</p>
