@@ -1,42 +1,112 @@
-<div class="min-h-screen bg-[#efe6d7]">
-  <div class="max-w-7xl mx-auto px-5 py-8 md:py-12">
-    <h1 class="text-3xl md:text-5xl font-extrabold tracking-tight">Transactions</h1>
+<% transactions = @transactions.load %>
+<% total_transactions = transactions.size %>
+<% total_amount_cents = transactions.sum { |t| t.amount_cents.to_i } %>
+<% dominant_currency = transactions.find { |t| t.currency.present? }&.currency %>
+<% dominant_currency = dominant_currency.presence || "₹" %>
+<% total_amount_display = total_transactions.positive? ? number_to_currency(total_amount_cents / 100.0, unit: dominant_currency) : "—" %>
+<% average_amount_cents = total_transactions.positive? ? total_amount_cents.fdiv(total_transactions) : 0 %>
+<% average_amount_display = total_transactions.positive? ? number_to_currency(average_amount_cents / 100.0, unit: dominant_currency) : "—" %>
+<% unique_merchants = transactions.map { |t| t.merchant.presence }.compact.uniq.size %>
+<% linked_email_count = transactions.count { |t| t.email_id.present? } %>
+<% linked_email_percentage = total_transactions.positive? ? ((linked_email_count.to_f / total_transactions) * 100).round : 0 %>
+<% status_counts = transactions.group_by { |t| t.status.presence || "Unlabeled" }.transform_values(&:size) %>
 
-    <%= form_with url: transactions_path,
-        method: :get,
-        data: {
-          turbo_frame: "transactions_list",
-          controller: "search",
-          action: "turbo:submit-end->search#clear turbo:load@document->search#focusInput",
-          "search-delay-value": 300
-        },
-        class: "mt-6 flex items-center gap-3" do %>
-      <div class="relative flex-1">
-        <span class="absolute inset-y-0 left-3 flex items-center text-slate-400">
-          <!-- magnifier -->
-          <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 105.1 5.1a7.5 7.5 0 0011.55 11.55z" />
-          </svg>
-        </span>
-        <input
-          type="search"
-          name="q"
-          value="<%= params[:q].to_s %>"
-          placeholder="Search transactions"
-          data-search-target="input"
-          data-action="input->search#input"
-          class="w-full rounded-xl border-2 border-black bg-white px-10 py-3 text-sm placeholder-slate-400 shadow-[0_6px_0_#000] focus:outline-none focus:ring-0 focus:shadow-[0_8px_0_#000]" />
+<div class="min-h-screen bg-[#efe6d7]">
+  <div class="mx-auto max-w-6xl space-y-6 px-5 py-8 md:py-12">
+    <div class="rounded-3xl border-2 border-black bg-[#fdebd0] p-6 shadow-[12px_12px_0_#000]">
+      <div class="flex flex-wrap items-start justify-between gap-4">
+        <div class="space-y-2">
+          <p class="text-xs font-semibold uppercase tracking-[0.35em] text-slate-500">Ledger</p>
+          <h1 class="text-3xl font-black text-slate-900 md:text-5xl">Transactions</h1>
+          <p class="max-w-xl text-sm text-slate-700">
+            Stay on top of every swipe, debit, and refund extracted from your inbox. Use the search and filters to slice through large datasets instantly.
+          </p>
+        </div>
+        <div class="rounded-full border-2 border-black bg-white px-6 py-2 text-center text-xs font-semibold uppercase tracking-[0.3em] text-slate-700 shadow-[0_4px_0_#000]">
+          <span class="text-base font-black text-slate-900"><%= total_transactions %></span>
+          <span class="ml-2 text-[11px]">records</span>
+        </div>
       </div>
-      <button type="submit" class="rounded-xl border-2 border-black bg-violet-400 px-4 py-3 text-white font-semibold shadow-[0_6px_0_#000] hover:bg-violet-500 cursor-pointer hover:cursor-pointer active:translate-y-[2px] active:shadow-[0_4px_0_#000]">
-        <!-- simple funnel icon -->
-        <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M3 5h18M6 12h12M10 19h4"/>
-        </svg>
-      </button>
-    <% end %>
+
+      <div class="mt-6 grid grid-cols-1 gap-4 md:grid-cols-3">
+        <div class="rounded-2xl border-2 border-black bg-white p-4 shadow-[6px_6px_0_#000]">
+          <p class="text-xs font-semibold uppercase tracking-[0.25em] text-slate-500">Total volume</p>
+          <p class="mt-2 text-3xl font-black text-slate-900"><%= total_amount_display %></p>
+          <p class="text-sm text-slate-500">Across all synced transactions</p>
+        </div>
+        <div class="rounded-2xl border-2 border-black bg-white p-4 shadow-[6px_6px_0_#000]">
+          <p class="text-xs font-semibold uppercase tracking-[0.25em] text-slate-500">Avg amount</p>
+          <p class="mt-2 text-3xl font-black text-slate-900"><%= average_amount_display %></p>
+          <p class="text-sm text-slate-500"><%= unique_merchants %> unique merchants</p>
+        </div>
+        <div class="rounded-2xl border-2 border-black bg-white p-4 shadow-[6px_6px_0_#000]">
+          <p class="text-xs font-semibold uppercase tracking-[0.25em] text-slate-500">Linked emails</p>
+          <p class="mt-2 text-3xl font-black text-slate-900"><%= linked_email_count %></p>
+          <p class="text-sm text-slate-500"><%= linked_email_percentage %>% of records</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="rounded-3xl border-2 border-black bg-white p-5 shadow-[12px_12px_0_#000] md:p-6">
+      <div class="flex flex-wrap items-center justify-between gap-4">
+        <div>
+          <p class="text-xs font-semibold uppercase tracking-[0.3em] text-slate-400">Search & filter</p>
+          <p class="text-sm text-slate-600">Look up merchants, categories, or reviewer notes in real time.</p>
+        </div>
+        <%= link_to "Go to inbox",
+            emails_path,
+            class: "inline-flex items-center gap-2 rounded-2xl border-2 border-black bg-[#fdebd0] px-4 py-2 text-sm font-semibold text-slate-900 shadow-[0_4px_0_#000] transition hover:-translate-y-0.5",
+            data: { turbo_frame: "_top" } %>
+      </div>
+
+      <%= form_with url: transactions_path,
+          method: :get,
+          data: {
+            turbo_frame: "transactions_list",
+            controller: "search",
+            action: "turbo:submit-end->search#clear turbo:load@document->search#focusInput",
+            "search-delay-value": 300
+          },
+          class: "mt-6 flex flex-col gap-3 md:flex-row" do %>
+        <div class="relative flex-1">
+          <span class="pointer-events-none absolute inset-y-0 left-4 flex items-center text-slate-400">
+            <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 105.1 5.1a7.5 7.5 0 0011.55 11.55z" />
+            </svg>
+          </span>
+          <input
+            type="search"
+            name="q"
+            value="<%= params[:q].to_s %>"
+            placeholder="Search transactions by merchant, notes, or category"
+            data-search-target="input"
+            data-action="input->search#input"
+            class="w-full rounded-2xl border-2 border-black bg-white px-12 py-3 text-base placeholder-slate-400 shadow-[0_6px_0_#000] focus:outline-none focus:ring-0 focus:shadow-[0_8px_0_#000]" />
+        </div>
+        <button
+          type="submit"
+          class="inline-flex items-center justify-center gap-2 rounded-2xl border-2 border-black bg-violet-400 px-6 py-3 text-sm font-semibold uppercase tracking-wide text-white shadow-[0_6px_0_#000] transition hover:bg-violet-500 active:translate-y-[2px] active:shadow-[0_4px_0_#000]">
+          <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3 5h18M6 12h12M10 19h4" />
+          </svg>
+          Run query
+        </button>
+      <% end %>
+
+      <% if status_counts.present? %>
+        <div class="mt-5 flex flex-wrap gap-2">
+          <% status_counts.sort_by { |_, count| -count }.first(5).each do |status, count| %>
+            <span class="inline-flex items-center gap-2 rounded-full border-2 border-black bg-[#efe6d7] px-4 py-1 text-xs font-semibold uppercase tracking-wide text-slate-700 shadow-[0_3px_0_#000]">
+              <span><%= status.titleize %></span>
+              <span class="rounded-full bg-white px-2 py-0.5 text-[11px] font-black text-slate-900"><%= count %></span>
+            </span>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
 
     <turbo-frame id="transactions_list">
-      <%= render "transactions/table", transactions: @transactions %>
+      <%= render "transactions/table", transactions: transactions %>
     </turbo-frame>
   </div>
 </div>
