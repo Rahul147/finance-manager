@@ -7,7 +7,8 @@
         data: {
           turbo_frame: "transactions_list",
           controller: "search",
-          action: "turbo:submit-end->search#clear", "search-delay-value": 300
+          action: "turbo:submit-end->search#clear turbo:load@document->search#focusInput",
+          "search-delay-value": 300
         },
         class: "mt-6 flex items-center gap-3" do %>
       <div class="relative flex-1">
@@ -26,7 +27,7 @@
           data-action="input->search#input"
           class="w-full rounded-xl border-2 border-black bg-white px-10 py-3 text-sm placeholder-slate-400 shadow-[0_6px_0_#000] focus:outline-none focus:ring-0 focus:shadow-[0_8px_0_#000]" />
       </div>
-      <button type="submit" class="rounded-xl border-2 border-black bg-violet-400 px-4 py-3 text-white font-semibold shadow-[0_6px_0_#000] hover:bg-violet-500 active:translate-y-[2px] active:shadow-[0_4px_0_#000]">
+      <button type="submit" class="rounded-xl border-2 border-black bg-violet-400 px-4 py-3 text-white font-semibold shadow-[0_6px_0_#000] hover:bg-violet-500 cursor-pointer hover:cursor-pointer active:translate-y-[2px] active:shadow-[0_4px_0_#000]">
         <!-- simple funnel icon -->
         <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
           <path stroke-linecap="round" stroke-linejoin="round" d="M3 5h18M6 12h12M10 19h4"/>

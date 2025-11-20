@@ -1,45 +1,33 @@
-<div class=" z-10 h-screen w-[64px] bg-[#e7decd] border-r-2 border-black">
+<div class="z-10 h-screen w-[64px] border-r-2 border-black bg-[#e7decd]">
   <div class="flex h-full flex-col items-center justify-between py-6">
     <div class="space-y-4">
-      <button
-        data-turbo-method="get"
-        data-turbo-action="advance" 
-        data-turbo-frame="_top"
-        onclick="Turbo.visit('<%= root_path %>')"
-        type="button"
-        class="grid place-items-center rounded-2xl border-2 border-black bg-amber-300 p-3 shadow-[4px_4px_0_#000] hover:translate-y-[1px] hover:shadow-[3px_3px_0_#000] transition cursor-pointer"
-      >
-        <%= image_tag "icons/analytics-icon.svg", alt: "Settings Icon", class:"h-6 w-6 text-black" %>
-      </button>
-      <button
-        data-turbo-method="get"
-        data-turbo-action="advance" 
-        data-turbo-frame="_top"
-        onclick="Turbo.visit('<%= transactions_path %>')"
-        type="button"
-        class="grid place-items-center rounded-2xl border-2 border-black bg-amber-300 p-3 shadow-[4px_4px_0_#000] hover:translate-y-[1px] hover:shadow-[3px_3px_0_#000] transition cursor-pointer"
-      >
-        <%= image_tag "icons/transactions-icon.svg", alt: "Transactions Icon", class:"h-6 w-6 text-black" %>
-        </svg>
-      </button>
-      <button
-        data-turbo-method="get"
-        data-turbo-action="advance" 
-        data-turbo-frame="_top"
-        onclick="Turbo.visit('<%= emails_path %>')"
-        type="button"
-        class="grid place-items-center rounded-2xl border-2 border-black bg-amber-300 p-3 shadow-[4px_4px_0_#000] hover:translate-y-[1px] hover:shadow-[3px_3px_0_#000] transition cursor-pointer"
-      >
-        <%= image_tag "icons/emails-icon.svg", alt: "Transactions Icon", class:"h-6 w-6 text-black" %>
-        </svg>
-      </button>
+      <%= link_to root_path,
+          class: "grid place-items-center rounded-2xl border-2 border-black bg-amber-300 p-3 shadow-[4px_4px_0_#000] transition hover:translate-y-[1px] hover:shadow-[3px_3px_0_#000]",
+          data: { turbo_frame: "_top", turbo_action: "advance" } do %>
+        <%= image_tag "icons/analytics-icon.svg", alt: "Analytics", class: "h-6 w-6 text-black" %>
+      <% end %>
+
+      <%= link_to transactions_path,
+          class: "grid place-items-center rounded-2xl border-2 border-black bg-amber-300 p-3 shadow-[4px_4px_0_#000] transition hover:translate-y-[1px] hover:shadow-[3px_3px_0_#000]",
+          data: { turbo_frame: "_top", turbo_action: "advance" } do %>
+        <%= image_tag "icons/transactions-icon.svg", alt: "Transactions", class: "h-6 w-6 text-black" %>
+      <% end %>
+
+      <%= link_to emails_path,
+          class: "grid place-items-center rounded-2xl border-2 border-black bg-amber-300 p-3 shadow-[4px_4px_0_#000] transition hover:translate-y-[1px] hover:shadow-[3px_3px_0_#000]",
+          data: { turbo_frame: "_top", turbo_action: "advance" } do %>
+        <%= image_tag "icons/emails-icon.svg", alt: "Emails", class: "h-6 w-6 text-black" %>
+      <% end %>
     </div>
+
     <div>
-    <%= button_to session_path,
-      method: :delete,
-      class: "grid place-items-center rounded-2xl border-2 border-black bg-amber-300 p-3 shadow-[4px_4px_0_#000] hover:translate-y-[1px] hover:shadow-[3px_3px_0_#000] transition cursor-pointer" do %>
-        <%= image_tag "icons/settings-icon.svg", alt: "Log out", class: "h-6 w-6 text-black" %>
-    <% end %>
+      <%= button_to session_path,
+          method: :delete,
+          class: "grid place-items-center rounded-2xl border-2 border-black bg-amber-300 p-3 shadow-[4px_4px_0_#000] transition hover:translate-y-[1px] hover:shadow-[3px_3px_0_#000]",
+          aria: { label: "Sign out" },
+          form: { class: "contents", data: { turbo_frame: "_top", turbo_action: "advance" } } do %>
+        <%= image_tag "icons/settings-icon.svg", alt: "Sign out", class: "h-6 w-6 text-black" %>
+      <% end %>
     </div>
   </div>
 </div>

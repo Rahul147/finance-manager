@@ -10,11 +10,17 @@ export default class extends Controller {
       () => this.element.requestSubmit(),
       this.delayValue
     );
+
+    this._focusInputSoon();
   }
 
   input() {
     this._syncUrl();
     this._submit();
+  }
+
+  focusInput() {
+    this._focusInputSoon();
   }
 
   _syncUrl() {
@@ -34,6 +40,21 @@ export default class extends Controller {
 
   // TODO: Clear the input?
   clear(event) {}
+
+  _focusInputSoon() {
+    if (!this.hasInputTarget) return;
+
+    const schedule =
+      globalThis.requestAnimationFrame ?? ((cb) => setTimeout(cb, 0));
+
+    schedule(() => {
+      if (!this.hasInputTarget) return;
+      this.inputTarget.focus({ preventScroll: true });
+      if (typeof this.inputTarget.select === "function") {
+        this.inputTarget.select();
+      }
+    });
+  }
 
   _debounce(fn, wait) {
     let t;
