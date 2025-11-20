@@ -1,12 +1,12 @@
 <!-- Root Emails listing page -->
 <div class="min-h-screen bg-[#efe6d7]">
   <div class="max-w-7xl mx-auto px-5 py-8 md:py-12">
-    <% user_name = (Current.user&.email_address.to_s.split("@").first&.capitalize.presence || "there") %>
+    <% user_name = (Current.user&.email_address.to_s.split("@").first&.capitalize.presence || "") %>
     <h1 class="text-3xl md:text-5xl font-extrabold tracking-tight">
-      Hey there <span class="inline-block"><%= user_name %></span> <span class="align-[-2px]">✨</span>
+      Hey there, <span class="inline-block"><%= user_name %></span><span class="align-[-2px]">✨</span>
     </h1>
     <p class="mt-2 text-slate-500">
-      This will be a description if we need one just to make this entire thing look better.
+      Welcome to the Email Page
     </p>
 
     <!-- Search + filter row -->
