@@ -3,9 +3,9 @@
 <% total_amount_cents = transactions.sum { |t| t.amount_cents.to_i } %>
 <% dominant_currency = transactions.find { |t| t.currency.present? }&.currency %>
 <% dominant_currency = dominant_currency.presence || "₹" %>
-<% total_amount_display = total_transactions.positive? ? number_to_currency(total_amount_cents / 100.0, unit: dominant_currency) : "—" %>
+<% total_amount_display = total_transactions.positive? ? number_to_currency(total_amount_cents / 100.0, unit: dominant_currency, format: "%u %n") : "—" %>
 <% average_amount_cents = total_transactions.positive? ? total_amount_cents.fdiv(total_transactions) : 0 %>
-<% average_amount_display = total_transactions.positive? ? number_to_currency(average_amount_cents / 100.0, unit: dominant_currency) : "—" %>
+<% average_amount_display = total_transactions.positive? ? number_to_currency(average_amount_cents / 100.0, unit: dominant_currency, format: "%u %n") : "—" %>
 <% unique_merchants = transactions.map { |t| t.merchant.presence }.compact.uniq.size %>
 <% linked_email_count = transactions.count { |t| t.email_id.present? } %>
 <% linked_email_percentage = total_transactions.positive? ? ((linked_email_count.to_f / total_transactions) * 100).round : 0 %>

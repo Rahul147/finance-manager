@@ -16,6 +16,6 @@ module TransactionsHelper
     return "—" if transaction.amount_cents.blank?
 
     unit = transaction.currency.presence || "₹"
-    number_to_currency(transaction.amount_cents / 100.0, unit: unit)
+    number_to_currency(transaction.amount_cents / 100.0, unit: unit, format: "%u %n")
   end
 end

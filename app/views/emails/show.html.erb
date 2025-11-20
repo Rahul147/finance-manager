@@ -66,7 +66,7 @@
             <p class="mt-2 text-xl font-black text-slate-900"><%= transaction.merchant.presence || "Unknown merchant" %></p>
             <p class="text-sm text-slate-600">
               <% currency = transaction.currency.presence || "₹" %>
-              <% amount_display = transaction.amount_cents.present? ? number_to_currency(transaction.amount_cents / 100.0, unit: currency) : "—" %>
+              <% amount_display = transaction.amount_cents.present? ? number_to_currency(transaction.amount_cents / 100.0, unit: currency, format: "%u %n") : "—" %>
               <%= amount_display %> • <%= transaction.transaction_date || transaction.created_at.to_date %>
             </p>
           <% else %>
