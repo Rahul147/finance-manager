@@ -21,6 +21,6 @@ class DownloadEmailsJob < ApplicationJob
   private
     def default_senders
       # TODO: This should come from the DB (configured per user?)
-      %w[alerts@axisbank.com alerts@hdfcbank.net credit_cards@icicibank.com onlinesbicard@sbicard.com]
+      %w[ alerts@axisbank.com alerts@hdfcbank.net credit_cards@icicibank.com onlinesbicard@sbicard.com ]
     end
 end

@@ -68,4 +68,3 @@ class TransactionMetrics
     ((value.to_f / total) * 100).round
   end
 end
-
