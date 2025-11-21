@@ -6,6 +6,7 @@ Rails.application.routes.draw do
 
   resources :emails, only: [ :index, :show ], path: "email"
   resources :transactions, only: [ :index, :show ]
+  get "dashboard", to: "dashboards#index", as: :dashboard
 
   # We'll allow only `google` as the provider for now
   scope :oauth, constraints: { provider: /google/ } do
@@ -23,5 +24,5 @@ Rails.application.routes.draw do
   # get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
 
   # Defines the root path route ("/")
-  root "transactions#index"
+  root "dashboards#index"
 end
