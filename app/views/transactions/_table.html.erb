@@ -15,7 +15,7 @@
         <tr>
           <th class="px-5 py-4">Details</th>
           <th class="px-5 py-4">Amount</th>
-          <th class="px-5 py-4">Status</th>
+          <th class="px-5 py-4">Category</th>
           <th class="px-5 py-4">Email</th>
           <th class="px-5 py-4 text-right">Action</th>
         </tr>
@@ -26,8 +26,6 @@
           <% category = t.category.presence || "Uncategorized" %>
           <% date = t.transaction_date || t.created_at.to_date %>
           <% relative = time_ago_in_words(t.created_at) %>
-          <% status_label = t.status.presence || "Unlabeled" %>
-          <% status_styles = transaction_status_styles(t.status) %>
           <tr class="group transition hover:bg-[#fff6eb]">
             <td class="px-5 py-4 align-top">
               <div class="font-semibold text-slate-900"><%= merchant %></div>
@@ -41,8 +39,8 @@
               <p class="text-xs text-slate-500">Captured in <%= t.currency.presence || "₹" %></p>
             </td>
             <td class="px-5 py-4 align-top">
-              <span class="inline-flex items-center rounded-full border-2 border-black px-3 py-1 text-[11px] font-semibold uppercase tracking-wide shadow-[0_3px_0_#000] <%= status_styles %>">
-                <%= status_label %>
+              <span class="inline-flex w-32 justify-center rounded-full border-2 border-black bg-amber-100 px-3 py-1 text-center text-[11px] font-semibold uppercase tracking-wide text-slate-800 shadow-[0_3px_0_#000]">
+                <%= category %>
               </span>
             </td>
             <td class="px-5 py-4 align-top">
