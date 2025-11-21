@@ -65,7 +65,7 @@ group :test do
   gem "selenium-webdriver"
 end
 
-gem "google-apis-gmail_v1", "~> 0.45.0"
+gem "google-apis-gmail_v1", "~> 0.46.0"
 gem "googleauth", "~> 1.15"
 gem "nokogiri", "~> 1.18"
 
