@@ -110,21 +110,19 @@ class DashboardSummary
 
   def latest_sync_by_account
     @latest_sync_by_account ||= begin
-      timestamps = emails_scope
-        .group(:email_account_id)
-        .maximum(Arel.sql("COALESCE(sent_at, created_at)"))
+      converted_timestamps = timestamps_by_account
 
       connected_accounts.map do |account|
         {
           account: account,
-          last_synced_at: timestamps[account.id]
+          last_synced_at: converted_timestamps[account.id]
         }
       end
     end
   end
 
   def latest_sync_at
-    @latest_sync_at ||= latest_sync_by_account.map { |row| row[:last_synced_at] }.compact.max
+    @latest_sync_at ||= timestamps_by_account.values.compact.max
   end
 
   private
@@ -141,6 +139,16 @@ class DashboardSummary
           amount_cents: amount.to_i
         }
       end
+  end
+
+  def timestamps_by_account
+    @timestamps_by_account ||= begin
+      raw = emails_scope
+        .group(:email_account_id)
+        .maximum(Arel.sql("COALESCE(sent_at, created_at)"))
+
+      raw.transform_values { |value| coerce_time(value) }
+    end
   end
 
   def transactions_scope
@@ -171,5 +179,15 @@ class DashboardSummary
       end_date = recent_7_day_range.first - 1.day
       (end_date - 6.days)..end_date
     end
+  end
+
+  def coerce_time(value)
+    return if value.blank?
+    return value if value.is_a?(ActiveSupport::TimeWithZone) || value.is_a?(Time) || value.is_a?(DateTime)
+    return value.to_time if value.respond_to?(:to_time)
+
+    Time.zone.parse(value.to_s)
+  rescue ArgumentError
+    nil
   end
 end
