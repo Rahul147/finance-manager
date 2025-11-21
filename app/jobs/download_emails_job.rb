@@ -1,7 +1,7 @@
 class DownloadEmailsJob < ApplicationJob
   queue_as :default
 
-  def perform(user_id, days: 1, max: 200)
+  def perform(user_id, days: 21, max: 200)
     Rails.logger.info("[DownloadEmailsJob] running")
     user = User.find(user_id)
     user.email_accounts.find_each do |acct|

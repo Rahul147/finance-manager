@@ -2,7 +2,7 @@ class ExtractTransactionFromEmailJob < ApplicationJob
   queue_as :default
 
   def perform(*args)
-    Rails.logger.info("[DownloadEmailsJob] running")
+    Rails.logger.info("[ExtractTransactionFromEmailJob] running")
 
     email_id = args.first
     raise ArgumentError, "missing email_id" unless email_id
@@ -10,10 +10,8 @@ class ExtractTransactionFromEmailJob < ApplicationJob
     email = Email.find(email_id)
     Rails.logger.info("ExtractTransactionFromEmailJob email_id=#{email_id} subject=#{email.subject.inspect}")
 
-    email_id = args.first
-
-    TransactionExtractor.extract!(email)
-    email.update!(processed: true)
+    transaction = TransactionExtractor.extract!(email)
+    email.update!(processed: true) if transaction.present?
 
     Rails.logger.info("ExtractTransactionFromEmailJob done email_id=#{email_id}")
   rescue => e

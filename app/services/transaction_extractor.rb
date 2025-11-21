@@ -85,6 +85,8 @@ module TransactionExtractor
       }.to_json
     }
 
+    transaction = email.financial_transaction
+
     if email.financial_transaction
       email.financial_transaction.update!(attrs)
       Rails.logger.info("TransactionExtractor: SUCCESS email_id=#{email.id} action=updated amount_cents=#{amount_cents} merchant=#{attrs[:merchant]}")
@@ -92,5 +94,7 @@ module TransactionExtractor
       email.create_financial_transaction!(attrs)
       Rails.logger.info("TransactionExtractor: SUCCESS email_id=#{email.id} action=created amount_cents=#{amount_cents} merchant=#{attrs[:merchant]}")
     end
+
+    transaction
   end
 end
