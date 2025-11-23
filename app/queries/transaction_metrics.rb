@@ -61,7 +61,7 @@ class TransactionMetrics
   def type_counts(limit = nil)
     counts = relation.group(:transaction_type).count
 
-    labeled_counts = counts.each_with_object({}) do |(raw_value, count), acc|
+    entries = counts.map do |raw_value, count|
       normalized = normalized_transaction_type_key(raw_value)
       label = if normalized.present?
         Transaction::TRANSACTION_TYPE_LABELS[normalized.to_sym] || normalized.titleize
@@ -69,10 +69,14 @@ class TransactionMetrics
         "Unknown"
       end
 
-      acc[label] = count
+      {
+        label: label,
+        count: count,
+        key: normalized
+      }
     end
 
-    sorted = labeled_counts.sort_by { |_, count| -count }
+    sorted = entries.sort_by { |entry| -entry[:count] }
     limit ? sorted.first(limit) : sorted
   end
 

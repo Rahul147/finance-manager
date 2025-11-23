@@ -1,11 +1,12 @@
 class TransactionsController < ApplicationController
   def index
-    scoped_transactions = search_transactions_scope
+    scoped_transactions = filtered_transactions_scope
 
     @transactions = scoped_transactions
       .includes(:email)
       .ordered_newest
     @metrics = TransactionMetrics.new(scoped_transactions)
+    @selected_transaction_type = transaction_type_filter
 
     render :index, layout: false if turbo_frame_request?
   end
@@ -45,8 +46,24 @@ class TransactionsController < ApplicationController
     @base_transactions_scope ||= Transaction.for_user(Current.user.id)
   end
 
-  def search_transactions_scope
-    base_transactions_scope.search(params[:q])
+  def filtered_transactions_scope
+    scope = base_transactions_scope
+    scope = scope.search(params[:q])
+    return scope unless transaction_type_filter
+
+    scope.where(transaction_type: Transaction.transaction_types[transaction_type_filter])
+  end
+
+  def transaction_type_filter
+    return @transaction_type_filter if defined?(@transaction_type_filter)
+
+    type_param = params[:transaction_type].to_s.strip
+    @transaction_type_filter =
+      if type_param.present? && Transaction.transaction_types.key?(type_param)
+        type_param
+      else
+        nil
+      end
   end
 
   def transaction_params

@@ -83,6 +83,9 @@
             data-action="input->search#input"
             class="w-full rounded-2xl border-2 border-black bg-white px-12 py-3 text-base placeholder-slate-400 shadow-[0_6px_0_#000] focus:outline-none focus:ring-0 focus:shadow-[0_8px_0_#000]" />
         </div>
+        <% if @selected_transaction_type.present? %>
+          <%= hidden_field_tag :transaction_type, @selected_transaction_type %>
+        <% end %>
         <button
           type="submit"
           class="inline-flex items-center justify-center gap-2 rounded-2xl border-2 border-black bg-violet-400 px-6 py-3 text-sm font-semibold uppercase tracking-wide text-white shadow-[0_6px_0_#000] transition hover:bg-violet-500 active:translate-y-[2px] active:shadow-[0_4px_0_#000]">
@@ -93,23 +96,40 @@
         </button>
       <% end %>
 
-      <% if status_counts.present? %>
-        <div class="mt-5 flex flex-wrap gap-2">
-          <% status_counts.each do |status, count| %>
-            <span class="inline-flex items-center gap-2 rounded-full border-2 border-black bg-[#efe6d7] px-4 py-1 text-xs font-semibold uppercase tracking-wide text-slate-700 shadow-[0_3px_0_#000]">
-              <span><%= status.titleize %></span>
-              <span class="rounded-full bg-white px-2 py-0.5 text-[11px] font-black text-slate-900"><%= count %></span>
-            </span>
-          <% end %>
-        </div>
-      <% end %>
+      <br />
+
       <% if type_counts.present? %>
+        <% selected_type = @selected_transaction_type %>
         <div class="mt-3 flex flex-wrap gap-2">
-          <% type_counts.each do |label, count| %>
-            <span class="inline-flex items-center gap-2 rounded-full border-2 border-black bg-white px-4 py-1 text-[11px] font-semibold uppercase tracking-wide text-slate-700 shadow-[0_3px_0_#000]">
-              <span><%= label %></span>
-              <span class="rounded-full bg-[#fdebd0] px-2 py-0.5 text-[10px] font-black text-slate-900"><%= count %></span>
-            </span>
+          <% type_counts.each do |entry| %>
+            <% label = entry[:label] %>
+            <% count = entry[:count] %>
+            <% key = entry[:key] %>
+            <% active = key.present? && key == selected_type %>
+            <% chip_classes = [
+              "inline-flex items-center gap-2 rounded-full border-2 border-black px-4 py-1 text-[11px] font-semibold uppercase tracking-wide shadow-[0_3px_0_#000] transition hover:-translate-y-0.5",
+              (active ? "bg-black text-white" : "bg-white text-slate-700")
+            ].join(" ") %>
+            <% badge_classes = active ? "rounded-full bg-white px-2 py-0.5 text-[10px] font-black text-black" : "rounded-full bg-[#fdebd0] px-2 py-0.5 text-[10px] font-black text-slate-900" %>
+            <% if key.present? %>
+              <% link_params = request.query_parameters.deep_dup %>
+              <% if active %>
+                <% link_params.delete("transaction_type") %>
+              <% else %>
+                <% link_params["transaction_type"] = key %>
+              <% end %>
+              <%= link_to transactions_path(link_params),
+                  class: chip_classes,
+                  data: { turbo_frame: "_top" } do %>
+                <span><%= label %></span>
+                <span class="<%= badge_classes %>"><%= count %></span>
+              <% end %>
+            <% else %>
+              <span class="<%= chip_classes %> opacity-60">
+                <span><%= label %></span>
+                <span class="<%= badge_classes %>"><%= count %></span>
+              </span>
+            <% end %>
           <% end %>
         </div>
       <% end %>
