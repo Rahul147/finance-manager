@@ -30,7 +30,7 @@
 
   <body>
  <div class="flex">
-  <nav id="main-nav" data-turbo-permanent>
+  <nav id="main-nav" data-turbo-permanent data-controller="navbar">
     <% if authenticated? %>
       <%= render "shared/navbar" %>
     <% end %>

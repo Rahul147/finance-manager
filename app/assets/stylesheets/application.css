@@ -8,3 +8,17 @@
  *
  * Consider organizing styles into separate files for maintainability.
  */
+
+.nav-link {
+  transition: background-color 120ms ease, transform 120ms ease, box-shadow 120ms ease;
+}
+
+.nav-link--active {
+  background-color: #f5c04c;
+  box-shadow: 2px 2px 0 #000;
+  transform: translateY(1px);
+}
+
+.nav-link--active img {
+  filter: brightness(0.1);
+}

@@ -1,21 +1,25 @@
 <div class="sticky top-0 z-10 h-screen w-[64px] flex-shrink-0 border-r-2 border-black bg-[#e7decd]">
   <div class="flex h-full flex-col items-center justify-between py-6">
+    <% nav_link_base_classes = "nav-link grid place-items-center rounded-2xl border-2 border-black bg-amber-300 p-3 shadow-[4px_4px_0_#000] transition hover:translate-y-[1px] hover:shadow-[3px_3px_0_#000]" %>
     <div class="space-y-4">
       <%= link_to dashboard_path,
-        class: "grid place-items-center rounded-2xl border-2 border-black bg-amber-300 p-3 shadow-[4px_4px_0_#000] transition hover:translate-y-[1px] hover:shadow-[3px_3px_0_#000]",
-        data: { turbo_frame: "_top", turbo_action: "advance" } do %>
+        class: [ nav_link_base_classes, ("nav-link--active" if current_page?(dashboard_path)) ].compact.join(" "),
+        data: { turbo_frame: "_top", turbo_action: "advance", navbar_target: "link", nav_path: dashboard_path },
+        aria: current_page?(dashboard_path) ? { current: "page" } : {} do %>
         <%= image_tag "icons/analytics-icon.svg", alt: "Analytics", class: "h-6 w-6 text-black" %>
       <% end %>
 
       <%= link_to transactions_path,
-          class: "grid place-items-center rounded-2xl border-2 border-black bg-amber-300 p-3 shadow-[4px_4px_0_#000] transition hover:translate-y-[1px] hover:shadow-[3px_3px_0_#000]",
-          data: { turbo_frame: "_top", turbo_action: "advance" } do %>
+          class: [ nav_link_base_classes, ("nav-link--active" if current_page?(transactions_path)) ].compact.join(" "),
+          data: { turbo_frame: "_top", turbo_action: "advance", navbar_target: "link", nav_path: transactions_path },
+          aria: current_page?(transactions_path) ? { current: "page" } : {} do %>
         <%= image_tag "icons/transactions-icon.svg", alt: "Transactions", class: "h-6 w-6 text-black" %>
       <% end %>
 
       <%= link_to emails_path,
-          class: "grid place-items-center rounded-2xl border-2 border-black bg-amber-300 p-3 shadow-[4px_4px_0_#000] transition hover:translate-y-[1px] hover:shadow-[3px_3px_0_#000]",
-          data: { turbo_frame: "_top", turbo_action: "advance" } do %>
+          class: [ nav_link_base_classes, ("nav-link--active" if current_page?(emails_path)) ].compact.join(" "),
+          data: { turbo_frame: "_top", turbo_action: "advance", navbar_target: "link", nav_path: emails_path },
+          aria: current_page?(emails_path) ? { current: "page" } : {} do %>
         <%= image_tag "icons/emails-icon.svg", alt: "Emails", class: "h-6 w-6 text-black" %>
       <% end %>
     </div>
