@@ -23,13 +23,13 @@
       <tbody class="divide-y divide-slate-200">
         <% transactions.each do |t| %>
           <% merchant = t.merchant.presence || "Unknown merchant" %>
-          <% category = t.category.presence || "Uncategorized" %>
+          <% category = t.category_display %>
           <% date = t.transaction_date || t.created_at.to_date %>
           <% relative = time_ago_in_words(t.created_at) %>
           <tr class="group transition hover:bg-[#fff6eb]">
             <td class="px-5 py-4 align-top">
               <div class="font-semibold text-slate-900"><%= merchant %></div>
-              <p class="text-xs font-medium uppercase tracking-wide text-slate-500"><%= category %></p>
+              <%= render "transactions/category_label", transaction: t %>
               <p class="mt-2 text-xs text-slate-500">
                 <%= date %> • <%= relative %> ago
               </p>
@@ -39,9 +39,7 @@
               <p class="text-xs text-slate-500">Captured in <%= t.currency.presence || "₹" %></p>
             </td>
             <td class="px-5 py-4 align-top">
-              <span class="inline-flex w-32 justify-center rounded-full border-2 border-black bg-amber-100 px-3 py-1 text-center text-[11px] font-semibold uppercase tracking-wide text-slate-800 shadow-[0_3px_0_#000]">
-                <%= category %>
-              </span>
+              <%= render "transactions/category_editor", transaction: t %>
             </td>
             <td class="px-5 py-4 align-top">
               <% if t.email.present? %>

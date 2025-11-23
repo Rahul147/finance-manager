@@ -5,7 +5,7 @@ Rails.application.routes.draw do
   resources :passwords, param: :token
 
   resources :emails, only: [ :index, :show ], path: "email"
-  resources :transactions, only: [ :index, :show ]
+  resources :transactions, only: [ :index, :show, :update ]
   get "dashboard", to: "dashboards#index", as: :dashboard
 
   # We'll allow only `google` as the provider for now

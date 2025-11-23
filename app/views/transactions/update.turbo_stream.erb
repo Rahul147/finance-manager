@@ -1,0 +1,8 @@
+<%= turbo_stream.replace dom_id(@transaction, :category_label) do %>
+  <%= render "transactions/category_label", transaction: @transaction %>
+<% end %>
+
+<%= turbo_stream.replace dom_id(@transaction, :category_editor) do %>
+  <%= render "transactions/category_editor", transaction: @transaction %>
+<% end %>
+
