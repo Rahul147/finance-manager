@@ -1,4 +1,11 @@
 class Transaction < ApplicationRecord
+  TRANSACTION_TYPE_LABELS = {
+    expense: "Expense",
+    investment: "Investment",
+    transfer: "Transfer",
+    loan: "Loan"
+  }.freeze
+
   CATEGORY_LIST = {
     # Housing & utilities
     rent:                "Rent",
@@ -74,6 +81,14 @@ class Transaction < ApplicationRecord
   belongs_to :user
   belongs_to :email
 
+  enum :transaction_type, {
+    expense: 0,
+    investment: 1,
+    transfer: 2,
+    loan: 3
+  }
+
+  scope :expenses, -> { where(transaction_type: transaction_types[:expense]) }
   scope :for_user, ->(user_id) { where(user_id: user_id) }
   scope :ordered_newest, -> { order(transaction_date: :desc, created_at: :desc) }
   scope :search, lambda { |raw_query|
@@ -127,11 +142,37 @@ class Transaction < ApplicationRecord
     value.to_s
   end
 
+  def self.transaction_type_options_for_select
+    TRANSACTION_TYPE_LABELS.map { |key, label| [ label, key.to_s ] }
+  end
+
+  validates :transaction_type, presence: true, inclusion: { in: transaction_types.keys }
+  after_initialize :set_default_transaction_type, if: :new_record?
+
+  def transaction_type_label
+    key = transaction_type.presence || self.class.transaction_types.key(transaction_type_before_type_cast)
+    return if key.blank?
+
+    symbolized = key.to_s.to_sym
+    TRANSACTION_TYPE_LABELS[symbolized] || symbolized.to_s.humanize
+  end
+
   def category_display
     Transaction.category_label_for(category).presence || "Uncategorized"
   end
 
   def category_select_value
     Transaction.category_key_for(category)
+  end
+
+  def transaction_type_select_value
+    key = transaction_type.presence || self.class.transaction_types.key(transaction_type_before_type_cast)
+    key&.to_s
+  end
+
+  private
+
+  def set_default_transaction_type
+    self.transaction_type ||= :expense
   end
 end

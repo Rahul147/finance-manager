@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_11_15_110941) do
+ActiveRecord::Schema[8.1].define(version: 2025_11_23_113546) do
   create_table "email_accounts", force: :cascade do |t|
     t.text "access_token"
     t.datetime "created_at", null: false
@@ -68,9 +68,11 @@ ActiveRecord::Schema[8.1].define(version: 2025_11_15_110941) do
     t.text "notes"
     t.string "status"
     t.date "transaction_date"
+    t.integer "transaction_type", default: 0, null: false
     t.datetime "updated_at", null: false
     t.integer "user_id", null: false
     t.index ["email_id"], name: "index_transactions_on_email_id"
+    t.index ["transaction_type"], name: "index_transactions_on_transaction_type"
     t.index ["user_id"], name: "index_transactions_on_user_id"
   end
 

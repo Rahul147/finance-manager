@@ -8,6 +8,7 @@
 <% trend_delta = trend[:current] - trend[:previous] %>
 <% trend_pct = trend[:previous].positive? ? ((trend_delta.to_f / trend[:previous]) * 100).round : nil %>
 <% latest_sync_at = summary.latest_sync_at %>
+<% type_breakdown = summary.transaction_type_breakdown %>
 
 <div class="min-h-screen bg-[#efe6d7]">
   <div class="mx-auto max-w-6xl space-y-6 px-5 py-8 md:py-12">
@@ -31,13 +32,13 @@
         <div class="rounded-2xl border-2 border-black bg-white p-4 shadow-[6px_6px_0_#000]">
           <p class="text-xs font-semibold uppercase tracking-[0.25em] text-slate-500">Lifetime spend</p>
           <p class="mt-2 text-3xl font-black text-slate-900"><%= lifetime_spend_display %></p>
-          <p class="text-sm text-slate-500">Across every parsed transaction</p>
+          <p class="text-sm text-slate-500">Expense-classified transactions only</p>
         </div>
 
         <div class="rounded-2xl border-2 border-black bg-white p-4 shadow-[6px_6px_0_#000]">
           <p class="text-xs font-semibold uppercase tracking-[0.25em] text-slate-500"><%= summary.current_month_label %> spend</p>
           <p class="mt-2 text-3xl font-black text-slate-900"><%= current_month_spend_display %></p>
-          <p class="text-sm text-slate-500"><%= number_with_delimiter(summary.current_month_transactions) %> transactions this month</p>
+          <p class="text-sm text-slate-500"><%= number_with_delimiter(summary.current_month_transactions) %> expense transactions this month</p>
         </div>
 
         <div class="rounded-2xl border-2 border-black bg-white p-4 shadow-[6px_6px_0_#000]">
@@ -45,7 +46,7 @@
           <div class="mt-2 flex items-end justify-between">
             <div>
               <p class="text-3xl font-black text-slate-900"><%= number_with_delimiter(trend[:current]) %></p>
-              <p class="text-sm text-slate-500">last 7 days</p>
+              <p class="text-sm text-slate-500">expense tx last 7 days</p>
             </div>
             <div class="text-right">
               <% if trend[:previous].positive? %>
@@ -63,6 +64,17 @@
           </div>
         </div>
       </div>
+
+      <% if type_breakdown.present? %>
+        <div class="mt-6 flex flex-wrap gap-2">
+          <% type_breakdown.each do |entry| %>
+            <span class="inline-flex items-center gap-2 rounded-full border-2 border-black bg-white px-4 py-1 text-xs font-semibold uppercase tracking-wide text-slate-700 shadow-[0_3px_0_#000]">
+              <span><%= entry[:label] %></span>
+              <span class="rounded-full bg-[#fdebd0] px-2 py-0.5 text-[11px] font-black text-slate-900"><%= entry[:count] %> • <%= entry[:percentage] %>%</span>
+            </span>
+          <% end %>
+        </div>
+      <% end %>
     </div>
 
     <div class="grid grid-cols-1 gap-6 xl:grid-cols-3">

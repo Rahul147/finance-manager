@@ -15,18 +15,18 @@ class DashboardSummary
   end
 
   def lifetime_spend_cents
-    @lifetime_spend_cents ||= transactions_scope.sum(:amount_cents).to_i
+    @lifetime_spend_cents ||= expense_transactions_scope.sum(:amount_cents).to_i
   end
 
   def current_month_spend_cents
-    @current_month_spend_cents ||= transactions_scope
+    @current_month_spend_cents ||= expense_transactions_scope
       .where(transaction_date: current_month_range)
       .sum(:amount_cents)
       .to_i
   end
 
   def current_month_transactions
-    @current_month_transactions ||= transactions_scope
+    @current_month_transactions ||= expense_transactions_scope
       .where(transaction_date: current_month_range)
       .count
   end
@@ -36,9 +36,10 @@ class DashboardSummary
   end
 
   def average_transaction_cents
-    return 0.0 if total_transactions.zero?
+    expense_count = expense_transactions_scope.count
+    return 0.0 if expense_count.zero?
 
-    lifetime_spend_cents.fdiv(total_transactions)
+    lifetime_spend_cents.fdiv(expense_count)
   end
 
   def dominant_currency
@@ -56,7 +57,7 @@ class DashboardSummary
 
   def top_categories
     @top_categories ||= grouped_amounts(
-      transactions_scope
+      expense_transactions_scope
         .where(transaction_date: current_month_range)
         .where.not(category: [ nil, "" ]),
       :category
@@ -65,7 +66,7 @@ class DashboardSummary
 
   def top_merchants
     @top_merchants ||= grouped_amounts(
-      transactions_scope
+      expense_transactions_scope
         .where(transaction_date: rolling_30_day_range)
         .where.not(merchant: [ nil, "" ]),
       :merchant
@@ -74,9 +75,30 @@ class DashboardSummary
 
   def recent_trend
     @recent_trend ||= {
-      current: transactions_scope.where(transaction_date: recent_7_day_range).count,
-      previous: transactions_scope.where(transaction_date: previous_7_day_range).count
+      current: expense_transactions_scope.where(transaction_date: recent_7_day_range).count,
+      previous: expense_transactions_scope.where(transaction_date: previous_7_day_range).count
     }
+  end
+
+  def transaction_type_breakdown
+    @transaction_type_breakdown ||= begin
+      counts = transactions_scope.group(:transaction_type).count
+
+      counts.map do |raw_value, count|
+        key = normalized_transaction_type_key(raw_value)
+        label = if key.present?
+          Transaction::TRANSACTION_TYPE_LABELS[key.to_sym] || key.titleize
+        else
+          "Unknown"
+        end
+
+        {
+          label: label,
+          count: count,
+          percentage: percentage(count)
+        }
+      end.sort_by { |entry| -entry[:count] }
+    end
   end
 
   # === Email / ingestion metrics ===
@@ -127,6 +149,12 @@ class DashboardSummary
 
   private
 
+  def percentage(value)
+    return 0 if total_transactions.zero?
+
+    ((value.to_f / total_transactions) * 100).round
+  end
+
   def grouped_amounts(scope, column)
     scope
       .group(column)
@@ -153,6 +181,16 @@ class DashboardSummary
 
   def transactions_scope
     @transactions_scope ||= Transaction.for_user(user.id)
+  end
+
+  def expense_transactions_scope
+    @expense_transactions_scope ||= transactions_scope.where(transaction_type: Transaction.transaction_types[:expense])
+  end
+
+  def normalized_transaction_type_key(value)
+    return value if value.is_a?(String) && value.present?
+
+    Transaction.transaction_types.key(value)
   end
 
   def emails_scope

@@ -30,11 +30,13 @@ export default class extends Controller {
   _setBusy(state) {
     if (!this.hasSelectTarget) return;
 
-    this.selectTarget.disabled = state;
-    if (state) {
-      this.selectTarget.setAttribute("aria-busy", "true");
-    } else {
-      this.selectTarget.removeAttribute("aria-busy");
-    }
+    this.selectTargets.forEach((element) => {
+      element.disabled = state;
+      if (state) {
+        element.setAttribute("aria-busy", "true");
+      } else {
+        element.removeAttribute("aria-busy");
+      }
+    });
   }
 }

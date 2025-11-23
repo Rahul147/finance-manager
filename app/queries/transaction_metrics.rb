@@ -11,17 +11,17 @@ class TransactionMetrics
   end
 
   def total_amount_cents
-    @total_amount_cents ||= relation.sum(:amount_cents).to_i
+    expense_amount_cents
   end
 
   def average_amount_cents
-    return 0 if total.zero?
+    return 0 if expense_total.zero?
 
-    total_amount_cents.fdiv(total)
+    expense_amount_cents.fdiv(expense_total)
   end
 
   def dominant_currency
-    @dominant_currency ||= relation
+    @dominant_currency ||= expense_relation
       .where.not(currency: [ nil, "" ])
       .group(:currency)
       .order(Arel.sql("COUNT(*) DESC"))
@@ -32,7 +32,7 @@ class TransactionMetrics
   end
 
   def unique_merchants
-    @unique_merchants ||= relation
+    @unique_merchants ||= expense_relation
       .where.not(merchant: [ nil, "" ])
       .distinct
       .count(:merchant)
@@ -58,9 +58,45 @@ class TransactionMetrics
     limit ? sorted.first(limit) : sorted
   end
 
+  def type_counts(limit = nil)
+    counts = relation.group(:transaction_type).count
+
+    labeled_counts = counts.each_with_object({}) do |(raw_value, count), acc|
+      normalized = normalized_transaction_type_key(raw_value)
+      label = if normalized.present?
+        Transaction::TRANSACTION_TYPE_LABELS[normalized.to_sym] || normalized.titleize
+      else
+        "Unknown"
+      end
+
+      acc[label] = count
+    end
+
+    sorted = labeled_counts.sort_by { |_, count| -count }
+    limit ? sorted.first(limit) : sorted
+  end
+
+  def expense_total
+    @expense_total ||= expense_relation.count
+  end
+
   private
 
   attr_reader :relation
+
+  def expense_amount_cents
+    @expense_amount_cents ||= expense_relation.sum(:amount_cents).to_i
+  end
+
+  def expense_relation
+    @expense_relation ||= relation.where(transaction_type: Transaction.transaction_types[:expense])
+  end
+
+  def normalized_transaction_type_key(value)
+    return value if value.is_a?(String) && value.present?
+
+    Transaction.transaction_types.key(value)
+  end
 
   def percentage(value)
     return 0 if total.zero?

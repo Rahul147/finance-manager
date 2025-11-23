@@ -22,7 +22,7 @@ class TransactionsController < ApplicationController
     respond_to do |format|
       if @transaction.update(transaction_params)
         format.turbo_stream
-        format.html { redirect_to transactions_path, notice: "Category updated." }
+        format.html { redirect_to transactions_path, notice: "Transaction updated." }
       else
         format.turbo_stream do
           render(
@@ -34,7 +34,7 @@ class TransactionsController < ApplicationController
             status: :unprocessable_entity
           )
         end
-        format.html { redirect_to transactions_path, alert: "Unable to update category." }
+        format.html { redirect_to transactions_path, alert: "Unable to update transaction." }
       end
     end
   end
@@ -50,6 +50,6 @@ class TransactionsController < ApplicationController
   end
 
   def transaction_params
-    params.require(:transaction).permit(:category)
+    params.require(:transaction).permit(:category, :transaction_type)
   end
 end

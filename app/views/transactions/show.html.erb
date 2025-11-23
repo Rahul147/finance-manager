@@ -7,6 +7,7 @@
 <% email = @transaction.email %>
 <% status_label = @transaction.status.presence || "Unlabeled" %>
 <% status_styles = transaction_status_styles(@transaction.status) %>
+<% type_label = @transaction.transaction_type_label || "Unclassified" %>
 
 <div class="min-h-screen bg-[#efe6d7]">
   <div class="mx-auto max-w-5xl space-y-6 px-5 py-8 md:py-12">
@@ -26,7 +27,7 @@
         <div class="min-w-0 flex-1 space-y-2">
           <p class="text-xs font-semibold uppercase tracking-[0.3em] text-slate-500">Merchant</p>
           <h1 class="text-3xl font-black leading-tight text-slate-900 md:text-4xl"><%= merchant %></h1>
-          <p class="text-sm font-medium text-slate-600"><%= category %> • <%= currency %></p>
+          <p class="text-sm font-medium text-slate-600"><%= category %> • <%= currency %> • <%= type_label %></p>
         </div>
         <div class="text-right">
           <p class="text-xs font-semibold uppercase tracking-[0.3em] text-slate-500">Amount</p>
@@ -47,6 +48,11 @@
           <p class="text-xs font-semibold uppercase tracking-wide text-slate-400">Currency</p>
           <p class="mt-1 font-semibold text-slate-900"><%= currency %></p>
           <p class="text-sm text-slate-500">Captured at sync</p>
+        </div>
+        <div class="rounded-2xl border-2 border-black bg-white p-4 shadow-[5px_5px_0_#000]">
+          <p class="text-xs font-semibold uppercase tracking-wide text-slate-400">Transaction type</p>
+          <p class="mt-1 font-semibold text-slate-900"><%= type_label %></p>
+          <p class="text-sm text-slate-500">Manual classification</p>
         </div>
         <div class="rounded-2xl border-2 border-black bg-white p-4 shadow-[5px_5px_0_#000]">
           <p class="text-xs font-semibold uppercase tracking-wide text-slate-400">Reference</p>
