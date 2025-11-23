@@ -4,11 +4,17 @@
       method: :patch,
       data: { controller: "category-select" },
       html: { class: "flex w-full flex-col items-center gap-2" } do |form| %>
-    <%= form.select :category,
-        Transaction.category_options_for_select,
-        { include_blank: "Uncategorized", selected: transaction.category_select_value },
-        class: "w-36 rounded-full border-2 border-black bg-amber-100 px-3 py-1 text-center text-[11px] font-semibold uppercase tracking-wide text-slate-800 shadow-[0_3px_0_#000] focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-400",
-        data: { action: "change->category-select#submit", "category-select-target": "select" } %>
+    <div class="relative inline-flex w-36 items-center justify-center">
+      <%= form.select :category,
+          Transaction.category_options_for_select,
+          { include_blank: "Uncategorized", selected: transaction.category_select_value },
+          class: "w-full appearance-none rounded-full border-2 border-black bg-amber-100 px-3 py-1 pr-9 text-center text-[11px] font-semibold uppercase tracking-wide text-slate-800 shadow-[0_3px_0_#000] focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-400",
+          data: { action: "change->category-select#submit", "category-select-target": "select" } %>
+      <svg class="pointer-events-none absolute right-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-slate-700" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+        <path stroke-linecap="round" stroke-linejoin="round" d="M19 5l-7 7-7-7" />
+      </svg>
+    </div>
     <% if transaction.errors[:category].present? %>
       <p class="text-[11px] font-semibold uppercase tracking-wide text-red-600">
         <%= transaction.errors[:category].first %>
