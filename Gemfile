@@ -66,7 +66,7 @@ group :test do
 end
 
 gem "google-apis-gmail_v1", "~> 0.46.0"
-gem "googleauth", "~> 1.15"
+gem "googleauth", "~> 1.16"
 gem "nokogiri", "~> 1.18"
 
 gem "tailwindcss-rails", "~> 4.4"
