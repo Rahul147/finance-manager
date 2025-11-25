@@ -212,7 +212,7 @@
                   <td class="px-4 py-3 capitalize"><%= account.provider %></td>
                   <td class="px-4 py-3">
                     <% status_label = account.status.to_s.presence || "Unknown" %>
-                    <% status_green = status_label.downcase == "connected" %>
+                    <% status_green = status_label.downcase == "active" %>
                     <span class="inline-flex items-center rounded-full border-2 border-black px-3 py-0.5 text-xs font-semibold uppercase tracking-wide <%= status_green ? 'bg-emerald-200 text-emerald-800' : 'bg-amber-200 text-amber-700' %>">
                       <%= status_label.titleize %>
                     </span>
