@@ -160,10 +160,10 @@
           <div class="rounded-2xl border-2 border-black bg-[#d1fae5] px-4 py-3 shadow-[0_4px_0_#000]">
             <p class="text-xs uppercase tracking-[0.35em] text-emerald-700">Last sync</p>
             <% if latest_sync_at.present? %>
-              <p class="text-lg font-semibold text-emerald-900">
+              <span class="text-lg font-semibold text-emerald-900">
                 <%= time_ago_in_words(latest_sync_at) %> ago
-                <span class="ml-1 text-xs text-emerald-800">( <%= l(latest_sync_at, format: :long) %> )</span>
-              </p>
+              </span>
+                <p class="text-xs text-emerald-800">( <%= l(latest_sync_at, format: :long) %> )</p>
             <% else %>
               <p class="text-sm text-slate-600">No sync activity logged yet.</p>
             <% end %>

@@ -51,7 +51,7 @@ class EmailMetrics
   end
 
   def latest_activity_at
-    @latest_activity_at ||= relation.maximum(Arel.sql("COALESCE(sent_at, created_at)"))
+    @latest_activity_at ||= relation.maximum(:created_at)
   end
 
   private

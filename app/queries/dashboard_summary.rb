@@ -173,7 +173,7 @@ class DashboardSummary
     @timestamps_by_account ||= begin
       raw = emails_scope
         .group(:email_account_id)
-        .maximum(Arel.sql("COALESCE(sent_at, created_at)"))
+        .maximum(:created_at)
 
       raw.transform_values { |value| coerce_time(value) }
     end
