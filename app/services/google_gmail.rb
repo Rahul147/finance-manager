@@ -107,11 +107,12 @@ module GoogleGmail
         client.refresh!
         acct.update!(
           access_token: client.access_token,
-          expires_at: Time.current + client.expires_in.to_i.seconds
+          expires_at: Time.current + client.expires_in.to_i.seconds,
+          status: "active"
         )
       end
     rescue Signet::AuthorizationError => e
-      acct.update!(access_token: nil, refresh_token: nil, expires_at: nil)
+      acct.update!(access_token: nil, refresh_token: nil, expires_at: nil, status: "inactive")
       raise GoogleReauthNeeded, e.message
     end
 
