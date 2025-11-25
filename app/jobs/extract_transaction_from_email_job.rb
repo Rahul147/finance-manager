@@ -11,7 +11,11 @@ class ExtractTransactionFromEmailJob < ApplicationJob
     Rails.logger.info("ExtractTransactionFromEmailJob email_id=#{email_id} subject=#{email.subject.inspect}")
 
     transaction = TransactionExtractor.extract!(email)
-    email.update!(processed: true) if transaction.present?
+    if transaction&.persisted?
+      email.update!(processed: true)
+    else
+      Rails.logger.info("ExtractTransactionFromEmailJob skip processed update email_id=#{email_id} reason=no_transaction")
+    end
 
     Rails.logger.info("ExtractTransactionFromEmailJob done email_id=#{email_id}")
   rescue => e
