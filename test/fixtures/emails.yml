@@ -1,0 +1,87 @@
+# Fixtures for Email model
+# These represent bank notification emails ingested from Gmail
+
+axis_debit:
+  user: one
+  email_account: one
+  message_id: msg_axis_debit_001
+  thread_id: thread_001
+  subject: "Transaction Alert from Axis Bank"
+  from_address: alerts@axisbank.com
+  to_address: one@gmail.com
+  snippet: "INR 1,500.00 debited from A/c **1234 on 15-Dec-24. Info: AMAZON PAY. Avl Bal: INR 45,000.00"
+  body_text: "Dear Customer, INR 1,500.00 has been debited from your Axis Bank A/c **1234 on 15-Dec-24 at 14:30:00. Info: AMAZON PAY. Available Balance: INR 45,000.00"
+  body_html: "<html><body>Dear Customer, INR 1,500.00 has been debited...</body></html>"
+  headers: '{"From": "alerts@axisbank.com", "Subject": "Transaction Alert from Axis Bank"}'
+  sent_at: <%= 2.days.ago %>
+  processed: true
+  created_at: <%= 2.days.ago %>
+  updated_at: <%= 2.days.ago %>
+
+hdfc_credit:
+  user: one
+  email_account: one
+  message_id: msg_hdfc_credit_001
+  thread_id: thread_002
+  subject: "HDFC Credit Card Transaction"
+  from_address: alerts@hdfcbank.net
+  to_address: one@gmail.com
+  snippet: "Your HDFC Bank Credit Card XX5678 has been used for Rs.3,200.50 at SWIGGY on 14-Dec-24"
+  body_text: "Dear Customer, Your HDFC Bank Credit Card XX5678 has been used for Rs.3,200.50 at SWIGGY on 14-Dec-24."
+  body_html: "<html><body>Dear Customer, Your HDFC Bank Credit Card XX5678...</body></html>"
+  headers: '{"From": "alerts@hdfcbank.net", "Subject": "HDFC Credit Card Transaction"}'
+  sent_at: <%= 3.days.ago %>
+  processed: true
+  created_at: <%= 3.days.ago %>
+  updated_at: <%= 3.days.ago %>
+
+icici_upi:
+  user: one
+  email_account: one
+  message_id: msg_icici_upi_001
+  thread_id: thread_003
+  subject: "ICICI Bank UPI Transaction"
+  from_address: credit_cards@icicibank.com
+  to_address: one@gmail.com
+  snippet: "Rs. 500.00 sent via UPI to GROCERY STORE on 13-Dec-24 from A/c XX9012"
+  body_text: "Dear Customer, Rs. 500.00 has been sent via UPI to GROCERY STORE on 13-Dec-24 from your A/c XX9012."
+  body_html: "<html><body>Dear Customer, Rs. 500.00 has been sent via UPI...</body></html>"
+  headers: '{"From": "credit_cards@icicibank.com", "Subject": "ICICI Bank UPI Transaction"}'
+  sent_at: <%= 4.days.ago %>
+  processed: false
+  created_at: <%= 4.days.ago %>
+  updated_at: <%= 4.days.ago %>
+
+user_two_email:
+  user: two
+  email_account: two
+  message_id: msg_user_two_001
+  thread_id: thread_004
+  subject: "SBI Card Transaction Alert"
+  from_address: onlinesbicard@sbicard.com
+  to_address: two@gmail.com
+  snippet: "Your SBI Card XX4321 was used for INR 750.00 at UBER on 12-Dec-24"
+  body_text: "Dear Customer, Your SBI Card XX4321 was used for INR 750.00 at UBER on 12-Dec-24."
+  body_html: "<html><body>Dear Customer, Your SBI Card XX4321...</body></html>"
+  headers: '{"From": "onlinesbicard@sbicard.com", "Subject": "SBI Card Transaction Alert"}'
+  sent_at: <%= 5.days.ago %>
+  processed: true
+  created_at: <%= 5.days.ago %>
+  updated_at: <%= 5.days.ago %>
+
+unprocessed:
+  user: one
+  email_account: one
+  message_id: msg_unprocessed_001
+  thread_id: thread_005
+  subject: "Axis Bank Alert"
+  from_address: alerts@axisbank.com
+  to_address: one@gmail.com
+  snippet: "INR 250.00 debited from A/c **1234 on 11-Dec-24. Info: PAYTM. Avl Bal: INR 44,750.00"
+  body_text: "Dear Customer, INR 250.00 has been debited from your Axis Bank A/c..."
+  body_html: "<html><body>Dear Customer, INR 250.00...</body></html>"
+  headers: '{"From": "alerts@axisbank.com", "Subject": "Axis Bank Alert"}'
+  sent_at: <%= 6.days.ago %>
+  processed: false
+  created_at: <%= 6.days.ago %>
+  updated_at: <%= 6.days.ago %>

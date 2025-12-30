@@ -1,0 +1,122 @@
+# Fixtures for Transaction model
+# These represent extracted transactions from bank emails
+
+amazon_purchase:
+  user: one
+  email: axis_debit
+  merchant: "Amazon Pay"
+  amount_cents: 150000
+  currency: INR
+  transaction_date: <%= 2.days.ago.to_date %>
+  category: groceries
+  notes: "Amazon Pay transaction"
+  status: parsed
+  transaction_type: 0
+  metadata: '{"bankName": "Axis Bank", "type": "DEBIT_CARD", "paymentInstrumentNumber": "XX1234"}'
+  created_at: <%= 2.days.ago %>
+  updated_at: <%= 2.days.ago %>
+
+swiggy_order:
+  user: one
+  email: hdfc_credit
+  merchant: "Swiggy"
+  amount_cents: 320050
+  currency: INR
+  transaction_date: <%= 3.days.ago.to_date %>
+  category: food_delivery
+  notes: "Food delivery order"
+  status: parsed
+  transaction_type: 0
+  metadata: '{"bankName": "HDFC Bank", "type": "CREDIT_CARD", "paymentInstrumentNumber": "XX5678"}'
+  created_at: <%= 3.days.ago %>
+  updated_at: <%= 3.days.ago %>
+
+uber_ride:
+  user: two
+  email: user_two_email
+  merchant: "Uber"
+  amount_cents: 75000
+  currency: INR
+  transaction_date: <%= 5.days.ago.to_date %>
+  category: local_transport
+  notes: "Uber ride"
+  status: parsed
+  transaction_type: 0
+  metadata: '{"bankName": "SBI Card", "type": "CREDIT_CARD", "paymentInstrumentNumber": "XX4321"}'
+  created_at: <%= 5.days.ago %>
+  updated_at: <%= 5.days.ago %>
+
+investment:
+  user: one
+  email: axis_debit
+  merchant: "Zerodha"
+  amount_cents: 1000000
+  currency: INR
+  transaction_date: <%= 1.week.ago.to_date %>
+  category: investments
+  notes: "Mutual fund SIP"
+  status: parsed
+  transaction_type: 1
+  metadata: '{"bankName": "Axis Bank", "type": "OTHER"}'
+  created_at: <%= 1.week.ago %>
+  updated_at: <%= 1.week.ago %>
+
+loan_emi:
+  user: one
+  email: hdfc_credit
+  merchant: "HDFC Home Loan"
+  amount_cents: 2500000
+  currency: INR
+  transaction_date: <%= 10.days.ago.to_date %>
+  category: home_loan_emi
+  notes: "Home loan EMI"
+  status: parsed
+  transaction_type: 3
+  metadata: '{"bankName": "HDFC Bank", "type": "OTHER"}'
+  created_at: <%= 10.days.ago %>
+  updated_at: <%= 10.days.ago %>
+
+transfer:
+  user: one
+  email: axis_debit
+  merchant: "Bank Transfer"
+  amount_cents: 500000
+  currency: INR
+  transaction_date: <%= 8.days.ago.to_date %>
+  category: misc
+  notes: "Transfer to savings"
+  status: parsed
+  transaction_type: 2
+  metadata: '{"bankName": "Axis Bank", "type": "UPI"}'
+  created_at: <%= 8.days.ago %>
+  updated_at: <%= 8.days.ago %>
+
+groceries_this_month:
+  user: one
+  email: axis_debit
+  merchant: "Big Basket"
+  amount_cents: 235000
+  currency: INR
+  transaction_date: <%= Date.current %>
+  category: groceries
+  notes: "Weekly groceries"
+  status: parsed
+  transaction_type: 0
+  metadata: '{"bankName": "Axis Bank", "type": "DEBIT_CARD"}'
+  created_at: <%= Time.current %>
+  updated_at: <%= Time.current %>
+
+dining_this_month:
+  user: one
+  email: hdfc_credit
+  merchant: "Cafe Coffee Day"
+  amount_cents: 45000
+  currency: INR
+  transaction_date: <%= 1.day.ago.to_date %>
+  category: dining_out
+  notes: "Coffee with colleagues"
+  status: parsed
+  transaction_type: 0
+  metadata: '{"bankName": "HDFC Bank", "type": "CREDIT_CARD"}'
+  created_at: <%= 1.day.ago %>
+  updated_at: <%= 1.day.ago %>
