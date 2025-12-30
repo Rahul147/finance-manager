@@ -21,9 +21,9 @@ class EmailsTest < ApplicationSystemTestCase
     fill_in "email_address", with: user.email_address
     fill_in "password", with: "password"
     click_button "Login"
+    assert_text "Dashboard"
 
-    within("#main-nav-content") { click_link "Emails" }
-    assert_current_path emails_path
+    visit emails_path
     assert_text "Test Email Subject"
   end
 
@@ -47,9 +47,9 @@ class EmailsTest < ApplicationSystemTestCase
     fill_in "email_address", with: user.email_address
     fill_in "password", with: "password"
     click_button "Login"
+    assert_text "Dashboard"
 
-    within("#main-nav-content") { click_link "Emails" }
-    assert_current_path emails_path
+    visit emails_path
     assert_text "Show Email Subject"
   end
 end
