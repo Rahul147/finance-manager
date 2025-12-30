@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html class="h-full">
   <head>
     <title><%= content_for(:title) || "Finance Manager" %></title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -11,33 +11,29 @@
 
     <%= yield :head %>
 
-    <%# Enable PWA manifest for installable apps (make sure to enable in config/routes.rb too!) %>
-    <%#= tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>
-
     <link rel="icon" href="/icon.png" type="image/png">
     <link rel="icon" href="/icon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="/icon.png">
 
-    <%# Google Fonts %>
+    <%# Google Fonts - Inter %>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preconnect" href="https://fonts.googleapis.com/css2?family=Azeret+Mono:ital,wght@0,100..900;1,100..900&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Staatliches&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-    <%# Includes all stylesheet files in app/assets/stylesheets %>
     <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
   </head>
 
-  <body>
- <div class="flex">
-  <nav id="main-nav" data-controller="navbar">
-    <% if authenticated? %>
-      <%= render "shared/navbar" %>
-    <% end %>
-  </nav>
-    <main class="flex-1">
-      <%= yield %>
-    </main>
- </div>
+  <body class="h-full bg-slate-50 font-sans antialiased">
+    <div class="flex h-full">
+      <% if authenticated? %>
+        <nav id="main-nav" data-controller="navbar">
+          <%= render "shared/navbar" %>
+        </nav>
+      <% end %>
+      <main class="flex-1 overflow-auto">
+        <%= yield %>
+      </main>
+    </div>
   </body>
 </html>

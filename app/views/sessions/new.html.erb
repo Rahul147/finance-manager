@@ -1,66 +1,73 @@
-<div class="min-h-screen bg-[#efe6d7] flex items-center justify-center md:p-0 p-4 relative overflow-hidden">
-  <%= image_tag "login.svg", class: "absolute bottom-0 md:-bottom-10 md:-left-10 xl:left-0 left-2 hidden md:block 2xl:left-20 left-2 2xl:w-[500px] w-[400px] h-auto pointer-events-none", alt: "Login decoration" %>
-  <%= image_tag "coin.svg", class: "absolute top-10 hidden md:block 2xl:right-1/8 right-1/10 xl:right-20 rotate-[20deg] md:right-0 md:w-[400px] xl:w-[300px] 2xl:w-[400px] h-auto pointer-events-none", alt: "Login decoration" %>
-  
-  <div class="w-full max-w-xl relative z-10">
+<div class="flex min-h-screen items-center justify-center bg-slate-50 px-4 py-12">
+  <div class="w-full max-w-md">
+    <%# Logo %>
+    <div class="mb-8 text-center">
+      <div class="mx-auto flex h-12 w-12 items-center justify-center rounded-xl bg-emerald-500 text-white">
+        <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m-3-2.818.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+        </svg>
+      </div>
+      <h1 class="mt-4 text-2xl font-bold text-slate-900">Welcome back</h1>
+      <p class="mt-1 text-sm text-slate-500">Sign in to your Finance Manager account</p>
+    </div>
+
     <% if flash[:notice].present? %>
-      <div class="mb-4 rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 text-emerald-700 text-sm">
+      <div class="mb-6 rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700">
         <%= flash[:notice] %>
       </div>
     <% end %>
 
-    <div class="relative border-2 border-black rounded-2xl bg-white mx-auto max-w-[518px] shadow-[10px_12px_0_0_rgba(0,0,0,0.9)]  ">
-      <div class="py-8 px-6 md:p-10 2xl:px-10 2xl:py-14">
-        <h1 class="text-3xl font-bold tracking-tight mb-2.5 font-mono">Welcome Back</h1>
-        <p class="text-zinc-500 text-sm font-mono leading-[24px]">
-         Please sign in to your account. If you don’t have an account register with us now!
-        </p>
-
-        <%= form_with url: session_path, html: { class: "mt-6 flex flex-col gap-8" } do |form| %>
-          <div>
-            <label class="block font-mono text-sm font-normal text-rose-500">Username</label>
-            <%= form.email_field :email_address,
-                  required: true,
-                  autofocus: true,
-                  autocomplete: "username",
-                  placeholder: "Enter username",
-                  value: params[:email_address],
-                  class: "mt-2 w-full font-mono rounded-lg border border-black bg-white/80 px-4 py-3 text-xs placeholder-slate-400 shadow-[5px_5px_0_0_rgba(0,0,0,0.9)] focus:outline-none focus:ring-0 transition" %>
-          </div>
-
-          <div>
-           <div class="flex items-center justify-between gap-4">
-            <label class="block font-mono text-sm font-normal text-rose-500">Password</label>
-             <div class="text-center font-mono">
-          <%= link_to "Forgot password?", new_password_path, class: "text-xs text-blue-600 hover:text-indigo-700 transition-colors transition-duration-300 underline underline-offset-2" %>
+    <%# Login Card %>
+    <div class="rounded-xl border border-slate-200 bg-white p-8 shadow-sm">
+      <%= form_with url: session_path, html: { class: "space-y-5" } do |form| %>
+        <div>
+          <label for="email_address" class="block text-sm font-medium text-slate-700">Email address</label>
+          <%= form.email_field :email_address,
+                required: true,
+                autofocus: true,
+                autocomplete: "username",
+                placeholder: "you@example.com",
+                value: params[:email_address],
+                class: "focus-ring mt-1.5 w-full rounded-lg border border-slate-200 bg-white px-4 py-2.5 text-sm placeholder-slate-400" %>
         </div>
-           </div>
-            <%= form.password_field :password,
-                  required: true,
-                  autocomplete: "current-password",
-                  maxlength: 72,
-                  placeholder: "Enter password",
-                  class: "mt-2 w-full font-mono rounded-lg border border-black bg-white/80 px-4 py-3 text-xs placeholder-slate-400 shadow-[5px_5px_0_0_rgba(0,0,0,0.9)] focus:outline-none focus:ring-0 transition" %>
-          </div>
-          <% if flash[:alert].present? %>
-            <div class="rounded-lg border border-rose-200 bg-rose-50 px-4 py-3 text-rose-700 text-sm">
-              <%= flash[:alert] %>
-            </div>
-          <% end %>
 
-          <div class="mt-4">
-            <%= form.submit "Login",
-                  class: "w-full font-mono rounded-xl cursor-pointer bg-rose-500 px-4 py-3 text-white font-semibold shadow-[5px_6px_0_0_rgba(0,0,0,0.9)] hover:bg-rose-600 active:bg-rose-700 active:translate-y-[2px] active:shadow-[6px_8px_0_0_rgba(0,0,0,0.9)] transition" %>
+        <div>
+          <div class="flex items-center justify-between">
+            <label for="password" class="block text-sm font-medium text-slate-700">Password</label>
+            <%= link_to "Forgot password?", new_password_path, class: "text-sm font-medium text-emerald-600 hover:text-emerald-700" %>
           </div>
+          <%= form.password_field :password,
+                required: true,
+                autocomplete: "current-password",
+                maxlength: 72,
+                placeholder: "Enter your password",
+                class: "focus-ring mt-1.5 w-full rounded-lg border border-slate-200 bg-white px-4 py-2.5 text-sm placeholder-slate-400" %>
+        </div>
 
-          <div class="border-t-2 border-zinc-300 pt-6">
-            <%= form.submit "Sign Up" , disabled: true,
-                  class: "w-full font-mono rounded-xl disabled:bg-zinc-200 disabled:text-zinc-400 disabled:cursor-not-allowed cursor-pointer bg-yellow-200 px-4 py-3 text-black font-semibold shadow-[5px_6px_0_0_rgba(0,0,0,0.9)] hover:bg-yellow-300 active:bg-yellow-400 active:translate-y-[2px] active:shadow-[6px_8px_0_0_rgba(0,0,0,0.9)] transition" %>
+        <% if flash[:alert].present? %>
+          <div class="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+            <%= flash[:alert] %>
           </div>
         <% end %>
 
-       
+        <div class="pt-2">
+          <%= form.submit "Sign in",
+                class: "w-full cursor-pointer rounded-lg bg-slate-900 px-4 py-2.5 text-sm font-medium text-white hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-slate-900 focus:ring-offset-2" %>
+        </div>
+      <% end %>
+
+      <div class="mt-6 border-t border-slate-100 pt-6">
+        <button
+          type="button"
+          disabled
+          class="w-full cursor-not-allowed rounded-lg border border-slate-200 bg-slate-50 px-4 py-2.5 text-sm font-medium text-slate-400">
+          Create account (Coming soon)
+        </button>
       </div>
     </div>
+
+    <p class="mt-6 text-center text-xs text-slate-500">
+      By signing in, you agree to our Terms of Service
+    </p>
   </div>
 </div>

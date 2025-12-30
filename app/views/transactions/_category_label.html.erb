@@ -1,8 +1,5 @@
 <% category_text = transaction.category_display %>
 <% type_label = transaction.transaction_type_label %>
-<div
-  id="<%= dom_id(transaction, :category_label) %>"
-  class="flex flex-col gap-1 text-xs font-medium uppercase tracking-wide text-slate-500">
-  <span><%= category_text %></span>
+<div id="<%= dom_id(transaction, :category_label) %>" class="text-xs text-slate-500">
+  <%= category_text %>
 </div>
-

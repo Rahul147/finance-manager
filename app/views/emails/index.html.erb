@@ -9,59 +9,62 @@
 <% last_synced_at = metrics.latest_activity_at %>
 <% top_senders = metrics.top_senders %>
 
-<div class="min-h-screen bg-[#efe6d7]">
-  <div class="mx-auto max-w-6xl space-y-6 px-5 py-8 md:py-12">
-    <div class="rounded-3xl border-2 border-black bg-[#fdebd0] p-6 shadow-[12px_12px_0_#000]">
-      <div class="flex flex-wrap items-start justify-between gap-4">
-        <div class="space-y-2">
-          <p class="text-xs font-semibold uppercase tracking-[0.35em] text-slate-500">Inbox</p>
-          <h1 class="text-3xl font-black text-slate-900 md:text-5xl">Emails</h1>
-          <p class="max-w-xl text-sm text-slate-700">
-            Stay on top of raw receipts and alert threads before they become ledger entries. Slice the inbox instantly, spot missing transactions, and open the original message without context switching.
-          </p>
+<div class="min-h-screen bg-slate-50">
+  <%# Header %>
+  <div class="border-b border-slate-200 bg-white">
+    <div class="mx-auto max-w-7xl px-6 py-4">
+      <div class="flex items-center justify-between">
+        <div>
+          <h1 class="text-xl font-semibold text-slate-900">Emails</h1>
+          <p class="text-sm text-slate-500">Manage your synced inbox messages</p>
         </div>
-        <div class="rounded-full border-2 border-black bg-white px-6 py-2 text-center text-xs font-semibold uppercase tracking-[0.3em] text-slate-700 shadow-[0_4px_0_#000]">
-          <span class="text-base font-black text-slate-900"><%= total_emails %></span>
-          <span class="ml-2 text-[11px]">messages</span>
-        </div>
-      </div>
-      <div class="mt-4 inline-flex items-center gap-2 rounded-full border-2 border-black bg-white/80 px-4 py-1 text-xs font-semibold uppercase tracking-wide text-slate-700 shadow-[0_3px_0_#000]">
-        <span>Last sync</span>
-        <span class="rounded-full bg-[#efe6d7] px-2 py-0.5 text-[11px] font-black text-slate-900">
-          <%= last_synced_at.present? ? "#{time_ago_in_words(last_synced_at)} ago" : "Awaiting sync" %>
-        </span>
-      </div>
-      <div class="mt-6 grid grid-cols-1 gap-4 md:grid-cols-3">
-        <div class="rounded-2xl border-2 border-black bg-white p-4 shadow-[6px_6px_0_#000]">
-          <p class="text-xs font-semibold uppercase tracking-[0.25em] text-slate-500">Processed</p>
-          <p class="mt-2 text-3xl font-black text-slate-900"><%= processed_count %></p>
-          <p class="text-sm text-slate-500"><%= processed_percentage %>% of inbox</p>
-        </div>
-        <div class="rounded-2xl border-2 border-black bg-white p-4 shadow-[6px_6px_0_#000]">
-          <p class="text-xs font-semibold uppercase tracking-[0.25em] text-slate-500">Linked transactions</p>
-          <p class="mt-2 text-3xl font-black text-slate-900"><%= linked_transactions %></p>
-          <p class="text-sm text-slate-500"><%= linked_percentage %>% connected</p>
-        </div>
-        <div class="rounded-2xl border-2 border-black bg-white p-4 shadow-[6px_6px_0_#000]">
-          <p class="text-xs font-semibold uppercase tracking-[0.25em] text-slate-500">Unique senders</p>
-          <p class="mt-2 text-3xl font-black text-slate-900"><%= unique_senders %></p>
-          <p class="text-sm text-slate-500"><%= pending_count %> pending messages</p>
+        <div class="flex items-center gap-3">
+          <% if last_synced_at.present? %>
+            <span class="inline-flex items-center gap-1.5 rounded-full bg-emerald-50 px-3 py-1 text-xs font-medium text-emerald-700">
+              <span class="h-1.5 w-1.5 rounded-full bg-emerald-500"></span>
+              Synced <%= time_ago_in_words(last_synced_at) %> ago
+            </span>
+          <% end %>
+          <%= link_to transactions_path,
+              class: "inline-flex items-center gap-1.5 rounded-lg bg-slate-900 px-3 py-1.5 text-xs font-medium text-white hover:bg-slate-800",
+              data: { turbo_frame: "_top" } do %>
+            View Transactions
+            <svg class="h-3.5 w-3.5" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M3 10a.75.75 0 01.75-.75h10.638L10.23 5.29a.75.75 0 111.04-1.08l5.5 5.25a.75.75 0 010 1.08l-5.5 5.25a.75.75 0 11-1.04-1.08l4.158-3.96H3.75A.75.75 0 013 10z" clip-rule="evenodd" />
+            </svg>
+          <% end %>
         </div>
       </div>
     </div>
+  </div>
 
-    <div class="rounded-3xl border-2 border-black bg-white p-5 shadow-[12px_12px_0_#000] md:p-6">
-      <div class="flex flex-wrap items-center justify-between gap-4">
-        <div>
-          <p class="text-xs font-semibold uppercase tracking-[0.3em] text-slate-400">Search & triage</p>
-          <p class="text-sm text-slate-600">Look up subjects, senders, or snippets in real time.</p>
-        </div>
-        <%= link_to "View ledger",
-            transactions_path,
-            class: "inline-flex items-center gap-2 rounded-2xl border-2 border-black bg-[#fdebd0] px-4 py-2 text-sm font-semibold text-slate-900 shadow-[0_4px_0_#000] transition hover:-translate-y-0.5",
-            data: { turbo_frame: "_top" } %>
+  <div class="mx-auto max-w-7xl px-6 py-6">
+    <%# Stats Cards %>
+    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <div class="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
+        <p class="text-sm font-medium text-slate-500">Total Emails</p>
+        <p class="mt-2 text-2xl font-bold text-slate-900"><%= total_emails %></p>
+        <p class="mt-1 text-xs text-slate-500"><%= processed_percentage %>% processed</p>
       </div>
+      <div class="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
+        <p class="text-sm font-medium text-slate-500">Processed</p>
+        <p class="mt-2 text-2xl font-bold text-emerald-600"><%= processed_count %></p>
+        <p class="mt-1 text-xs text-slate-500"><%= pending_count %> pending</p>
+      </div>
+      <div class="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
+        <p class="text-sm font-medium text-slate-500">Linked Transactions</p>
+        <p class="mt-2 text-2xl font-bold text-slate-900"><%= linked_transactions %></p>
+        <p class="mt-1 text-xs text-slate-500"><%= linked_percentage %>% connected</p>
+      </div>
+      <div class="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
+        <p class="text-sm font-medium text-slate-500">Unique Senders</p>
+        <p class="mt-2 text-2xl font-bold text-slate-900"><%= unique_senders %></p>
+        <p class="mt-1 text-xs text-slate-500">Distinct addresses</p>
+      </div>
+    </div>
 
+    <%# Search %>
+    <div class="mt-6 rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
       <%= form_with url: emails_path,
           method: :get,
           data: {
@@ -70,44 +73,47 @@
             action: "turbo:submit-end->search#clear turbo:load@document->search#focusInput",
             "search-delay-value": 300
           },
-          class: "mt-6 flex flex-col gap-3 md:flex-row" do %>
+          class: "flex flex-col gap-4 md:flex-row md:items-center" do %>
         <div class="relative flex-1">
-          <span class="pointer-events-none absolute inset-y-0 left-4 flex items-center text-slate-400">
-            <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 105.1 5.1a7.5 7.5 0 0011.55 11.55z" />
+          <span class="pointer-events-none absolute inset-y-0 left-3 flex items-center text-slate-400">
+            <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M9 3.5a5.5 5.5 0 100 11 5.5 5.5 0 000-11zM2 9a7 7 0 1112.452 4.391l3.328 3.329a.75.75 0 11-1.06 1.06l-3.329-3.328A7 7 0 012 9z" clip-rule="evenodd" />
             </svg>
           </span>
           <input
             type="search"
             name="q"
             value="<%= params[:q].to_s %>"
-            placeholder="Search emails by subject, sender, or snippet"
+            placeholder="Search by subject, sender, or snippet..."
             data-search-target="input"
             data-action="input->search#input"
-            class="w-full rounded-2xl border-2 border-black bg-white px-12 py-3 text-base placeholder-slate-400 shadow-[0_6px_0_#000] focus:outline-none focus:ring-0 focus:shadow-[0_8px_0_#000]" />
+            class="focus-ring w-full rounded-lg border border-slate-200 bg-white py-2.5 pl-10 pr-4 text-sm placeholder-slate-400" />
         </div>
         <button
           type="submit"
-          class="inline-flex items-center justify-center gap-2 rounded-2xl border-2 border-black bg-violet-400 px-6 py-3 text-sm font-semibold uppercase tracking-wide text-white shadow-[0_6px_0_#000] transition hover:bg-violet-500 active:translate-y-[2px] active:shadow-[0_4px_0_#000]">
-          <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M3 5h18M6 12h12M10 19h4" />
+          class="inline-flex items-center justify-center gap-2 rounded-lg bg-slate-900 px-4 py-2.5 text-sm font-medium text-white hover:bg-slate-800">
+          <svg class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M9 3.5a5.5 5.5 0 100 11 5.5 5.5 0 000-11zM2 9a7 7 0 1112.452 4.391l3.328 3.329a.75.75 0 11-1.06 1.06l-3.329-3.328A7 7 0 012 9z" clip-rule="evenodd" />
           </svg>
-          Run query
+          Search
         </button>
       <% end %>
 
+      <%# Top Senders Pills %>
       <% if top_senders.present? %>
-        <div class="mt-5 flex flex-wrap gap-2">
+        <div class="mt-4 flex flex-wrap gap-2 border-t border-slate-100 pt-4">
+          <span class="text-xs font-medium text-slate-500">Top senders:</span>
           <% top_senders.each do |sender, count| %>
-            <span class="inline-flex items-center gap-2 rounded-full border-2 border-black bg-[#efe6d7] px-4 py-1 text-xs font-semibold uppercase tracking-wide text-slate-700 shadow-[0_3px_0_#000]">
-              <span><%= sender.truncate(24) %></span>
-              <span class="rounded-full bg-white px-2 py-0.5 text-[11px] font-black text-slate-900"><%= count %></span>
+            <span class="inline-flex items-center gap-1.5 rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-700">
+              <%= sender.truncate(24) %>
+              <span class="rounded-full bg-white px-1.5 py-0.5"><%= count %></span>
             </span>
           <% end %>
         </div>
       <% end %>
     </div>
 
+    <%# Emails Table %>
     <turbo-frame id="emails_list">
       <%= render "emails/table", emails: @emails, latest_synced_at: last_synced_at %>
     </turbo-frame>
