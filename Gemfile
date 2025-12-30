@@ -68,7 +68,7 @@ end
 
 gem "google-apis-gmail_v1", "~> 0.46.0"
 gem "googleauth", "~> 1.16"
-gem "nokogiri", "~> 1.18"
+gem "nokogiri", "~> 1.19"
 
 gem "tailwindcss-rails", "~> 4.4"
 
