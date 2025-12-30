@@ -11,6 +11,7 @@ module ActiveSupport
     # Setup all fixtures in test/fixtures/*.yml for all tests in alphabetical order.
     fixtures :all
 
-    # Add more helper methods to be used by all tests here...
+    # Include ActiveJob test helpers for assert_enqueued_with, etc.
+    include ActiveJob::TestHelper
   end
 end
