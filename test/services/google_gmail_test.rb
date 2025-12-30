@@ -4,6 +4,8 @@ require "ostruct"
 class GoogleGmailTest < ActiveSupport::TestCase
   setup do
     @account = email_accounts(:one)
+    # Ensure GoogleGmail is loaded (also loads GoogleReauthNeeded defined in same file)
+    GoogleGmail
   end
 
   # === Helper Methods (no external API calls) ===
