@@ -68,3 +68,18 @@
   box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.2);
   border-color: #22c55e;
 }
+
+/* Turbo Frame loading states - smooth transitions */
+turbo-frame {
+  display: block;
+  transition: opacity 150ms ease;
+}
+
+turbo-frame[aria-busy="true"] {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+turbo-frame[aria-busy="true"] > * {
+  transition: none;
+}
