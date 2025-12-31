@@ -1,6 +1,6 @@
 <p>
   Welcome to Finance Manager! Please verify your email address by clicking
-  <%= link_to "this verification link", email_verification_url(token: @user.generate_token_for(:email_verification)) %>.
+  <%= link_to "this verification link", @verification_url %>.
 </p>
 
 <p>

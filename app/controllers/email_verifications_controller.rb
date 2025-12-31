@@ -20,7 +20,18 @@ class EmailVerificationsController < ApplicationController
 
   def create
     if (user = User.find_by(email_address: params[:email_address]))
-      EmailVerificationMailer.verification(user).deliver_later unless user.email_verified?
+      unless user.email_verified?
+        if Rails.env.development?
+          token = user.generate_token_for(:email_verification)
+          puts ""
+          puts "=" * 60
+          puts "VERIFICATION EMAIL for #{user.email_address}"
+          puts "http://localhost:3000/email_verification?token=#{token}"
+          puts "=" * 60
+          puts ""
+        end
+        EmailVerificationMailer.verification(user).deliver_later
+      end
     end
 
     redirect_to new_session_path, notice: "If an account exists with that email, verification instructions have been sent."

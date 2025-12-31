@@ -35,7 +35,7 @@ class RegistrationsControllerTest < ActionDispatch::IntegrationTest
     end
 
     assert_redirected_to new_session_path
-    assert_equal "Account created! Please check your email to verify your account.", flash[:notice]
+    assert_equal "Account created! Check your email (or server logs) to verify.", flash[:notice]
 
     user = User.find_by(email_address: "newuser@example.com")
     assert_not_nil user

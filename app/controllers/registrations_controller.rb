@@ -11,8 +11,17 @@ class RegistrationsController < ApplicationController
     @user = User.new(registration_params)
 
     if @user.save
+      if Rails.env.development?
+        token = @user.generate_token_for(:email_verification)
+        puts ""
+        puts "=" * 60
+        puts "VERIFICATION EMAIL for #{@user.email_address}"
+        puts "http://localhost:3000/email_verification?token=#{token}"
+        puts "=" * 60
+        puts ""
+      end
       EmailVerificationMailer.verification(@user).deliver_later
-      redirect_to new_session_path, notice: "Account created! Please check your email to verify your account."
+      redirect_to new_session_path, notice: "Account created! Check your email (or server logs) to verify."
     else
       render :new, status: :unprocessable_entity
     end
