@@ -136,6 +136,61 @@ class UserTest < ActiveSupport::TestCase
     assert_equal users(:one), result
   end
 
+  # === Email Verification ===
+
+  test "email_verified? returns false when email_verified_at is nil" do
+    user = User.new(email_address: "test@example.com", password: "password")
+    assert_not user.email_verified?
+  end
+
+  test "email_verified? returns true when email_verified_at is present" do
+    user = User.new(email_address: "test@example.com", password: "password", email_verified_at: Time.current)
+    assert user.email_verified?
+  end
+
+  test "mark_as_verified! sets email_verified_at" do
+    user = User.create!(email_address: "verify@example.com", password: "password")
+    assert_nil user.email_verified_at
+
+    user.mark_as_verified!
+
+    assert_not_nil user.email_verified_at
+    assert user.email_verified?
+  end
+
+  test "generates email verification token" do
+    user = users(:one)
+    token = user.generate_token_for(:email_verification)
+
+    assert_not_nil token
+    assert token.is_a?(String)
+    assert token.length > 20
+  end
+
+  test "finds user by valid email verification token" do
+    user = users(:one)
+    token = user.generate_token_for(:email_verification)
+
+    found_user = User.find_by_token_for(:email_verification, token)
+
+    assert_equal user, found_user
+  end
+
+  test "returns nil for invalid email verification token" do
+    found_user = User.find_by_token_for(:email_verification, "invalid_token")
+    assert_nil found_user
+  end
+
+  test "email verification token expires after 24 hours" do
+    user = users(:one)
+    token = user.generate_token_for(:email_verification)
+
+    travel 25.hours do
+      found_user = User.find_by_token_for(:email_verification, token)
+      assert_nil found_user
+    end
+  end
+
   # === Edge Cases ===
 
   test "can update password" do

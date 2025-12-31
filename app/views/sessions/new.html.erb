@@ -54,8 +54,8 @@
           </div>
 
           <div class="border-t-2 border-zinc-300 pt-6">
-            <%= form.submit "Sign Up" , disabled: true,
-                  class: "w-full font-mono rounded-xl disabled:bg-zinc-200 disabled:text-zinc-400 disabled:cursor-not-allowed cursor-pointer bg-yellow-200 px-4 py-3 text-black font-semibold shadow-[5px_6px_0_0_rgba(0,0,0,0.9)] hover:bg-yellow-300 active:bg-yellow-400 active:translate-y-[2px] active:shadow-[6px_8px_0_0_rgba(0,0,0,0.9)] transition" %>
+            <%= link_to "Sign Up", new_registration_path,
+                  class: "block text-center w-full font-mono rounded-xl cursor-pointer bg-yellow-300 px-4 py-3 text-black font-semibold shadow-[5px_6px_0_0_rgba(0,0,0,0.9)] hover:bg-yellow-400 active:bg-yellow-500 active:translate-y-[2px] active:shadow-[6px_8px_0_0_rgba(0,0,0,0.9)] transition" %>
           </div>
         <% end %>
 

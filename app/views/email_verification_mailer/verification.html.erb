@@ -1,0 +1,8 @@
+<p>
+  Welcome to Finance Manager! Please verify your email address by clicking
+  <%= link_to "this verification link", email_verification_url(token: @user.generate_token_for(:email_verification)) %>.
+</p>
+
+<p>
+  This link will expire in 24 hours.
+</p>
