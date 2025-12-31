@@ -3,7 +3,7 @@ require "application_system_test_case"
 class PasswordResetTest < ApplicationSystemTestCase
   test "visiting password reset request page" do
     visit new_password_url
-    assert_text "Forgot your password?"
+    assert_text "Forgot Password"
   end
 
   test "requesting password reset shows confirmation" do
@@ -22,6 +22,6 @@ class PasswordResetTest < ApplicationSystemTestCase
     click_link "Forgot password?"
 
     assert_current_path new_password_path
-    assert_text "Forgot your password?"
+    assert_text "Forgot Password"
   end
 end
