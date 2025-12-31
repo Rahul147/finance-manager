@@ -1,0 +1,51 @@
+<div class="min-h-screen bg-[#efe6d7] flex items-center justify-center md:p-0 p-4 relative overflow-hidden">
+  <%= image_tag "login.svg", class: "absolute bottom-0 md:-bottom-10 md:-left-10 xl:left-0 left-2 hidden md:block 2xl:left-20 left-2 2xl:w-[500px] w-[400px] h-auto pointer-events-none", alt: "Login decoration" %>
+  <%= image_tag "coin.svg", class: "absolute top-10 hidden md:block 2xl:right-1/8 right-1/10 xl:right-20 rotate-[20deg] md:right-0 md:w-[400px] xl:w-[300px] 2xl:w-[400px] h-auto pointer-events-none", alt: "Login decoration" %>
+
+  <div class="w-full max-w-xl relative z-10">
+    <% if flash[:notice].present? %>
+      <div class="mb-4 rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 text-emerald-700 text-sm">
+        <%= flash[:notice] %>
+      </div>
+    <% end %>
+
+    <div class="relative border-2 border-black rounded-2xl bg-white mx-auto max-w-[518px] shadow-[10px_12px_0_0_rgba(0,0,0,0.9)]  ">
+      <div class="py-8 px-6 md:p-10 2xl:px-10 2xl:py-14">
+        <h1 class="text-3xl font-bold tracking-tight mb-2.5 font-mono">Verify Email</h1>
+        <p class="text-zinc-500 text-sm font-mono leading-[24px]">
+         Enter your email address and we'll send you a new verification link.
+        </p>
+
+        <%= form_with url: email_verification_path, html: { class: "mt-6 flex flex-col gap-6" } do |form| %>
+          <div>
+            <label class="block font-mono text-sm font-normal text-rose-500">Email</label>
+            <%= form.email_field :email_address,
+                  required: true,
+                  autofocus: true,
+                  autocomplete: "email",
+                  placeholder: "Enter email address",
+                  value: params[:email_address],
+                  class: "mt-2 w-full font-mono rounded-lg border border-black bg-white/80 px-4 py-3 text-xs placeholder-slate-400 shadow-[5px_5px_0_0_rgba(0,0,0,0.9)] focus:outline-none focus:ring-0 transition" %>
+          </div>
+
+          <% if flash[:alert].present? %>
+            <div class="rounded-lg border border-rose-200 bg-rose-50 px-4 py-3 text-rose-700 text-sm">
+              <%= flash[:alert] %>
+            </div>
+          <% end %>
+
+          <div class="mt-4">
+            <%= form.submit "Resend Verification",
+                  class: "w-full font-mono rounded-xl cursor-pointer bg-yellow-300 px-4 py-3 text-black font-semibold shadow-[5px_6px_0_0_rgba(0,0,0,0.9)] hover:bg-yellow-400 active:bg-yellow-500 active:translate-y-[2px] active:shadow-[6px_8px_0_0_rgba(0,0,0,0.9)] transition" %>
+          </div>
+
+          <div class="border-t-2 border-zinc-300 pt-6 text-center">
+            <%= link_to "Back to Sign In", new_session_path, class: "text-sm text-blue-600 hover:text-indigo-700 underline underline-offset-2 font-mono" %>
+          </div>
+        <% end %>
+
+
+      </div>
+    </div>
+  </div>
+</div>

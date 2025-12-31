@@ -1,10 +1,10 @@
 require "test_helper"
 
-class EmailMetricsTest < ActiveSupport::TestCase
+class Email::MetricsTest < ActiveSupport::TestCase
   setup do
     @user = users(:one)
     @relation = Email.for_user(@user.id)
-    @metrics = EmailMetrics.new(@relation)
+    @metrics = Email::Metrics.new(@relation)
   end
 
   # === Basic Counts ===
@@ -36,7 +36,7 @@ class EmailMetricsTest < ActiveSupport::TestCase
   end
 
   test "processed_percentage returns zero when total is zero" do
-    empty_metrics = EmailMetrics.new(Email.none)
+    empty_metrics = Email::Metrics.new(Email.none)
     assert_equal 0, empty_metrics.processed_percentage
   end
 
@@ -105,7 +105,7 @@ class EmailMetricsTest < ActiveSupport::TestCase
   end
 
   test "latest_activity_at returns nil for empty relation" do
-    empty_metrics = EmailMetrics.new(Email.none)
+    empty_metrics = Email::Metrics.new(Email.none)
     assert_nil empty_metrics.latest_activity_at
   end
 
@@ -113,7 +113,7 @@ class EmailMetricsTest < ActiveSupport::TestCase
 
   test "works with filtered relation" do
     filtered = @relation.processed
-    metrics = EmailMetrics.new(filtered)
+    metrics = Email::Metrics.new(filtered)
 
     assert metrics.total <= @metrics.total
     assert_equal metrics.total, metrics.processed # All should be processed
@@ -121,7 +121,7 @@ class EmailMetricsTest < ActiveSupport::TestCase
 
   test "works with search filtered relation" do
     searched = @relation.search("Axis")
-    metrics = EmailMetrics.new(searched)
+    metrics = Email::Metrics.new(searched)
 
     assert metrics.total > 0
     assert_respond_to metrics, :unique_senders
@@ -131,7 +131,7 @@ class EmailMetricsTest < ActiveSupport::TestCase
   # === Edge Cases ===
 
   test "handles empty relation" do
-    empty_metrics = EmailMetrics.new(Email.none)
+    empty_metrics = Email::Metrics.new(Email.none)
 
     assert_equal 0, empty_metrics.total
     assert_equal 0, empty_metrics.processed
@@ -149,7 +149,7 @@ class EmailMetricsTest < ActiveSupport::TestCase
     email = emails(:axis_debit)
     email.update_column(:from_address, nil)
 
-    metrics = EmailMetrics.new(Email.where(id: email.id))
+    metrics = Email::Metrics.new(Email.where(id: email.id))
     assert_equal 0, metrics.unique_senders
     assert_equal [], metrics.top_senders
   end

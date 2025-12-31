@@ -1,4 +1,4 @@
-class TransactionMetrics
+class Transaction::Metrics
   DEFAULT_CURRENCY = "₹".freeze
   UNLABELED_STATUS = "Unlabeled".freeze
 
@@ -62,15 +62,9 @@ class TransactionMetrics
     counts = relation.group(:transaction_type).count
 
     entries = counts.map do |raw_value, count|
-      normalized = normalized_transaction_type_key(raw_value)
-      label = if normalized.present?
-        Transaction::TRANSACTION_TYPE_LABELS[normalized.to_sym] || normalized.titleize
-      else
-        "Unknown"
-      end
-
+      normalized = Transaction.normalize_type_key(raw_value)
       {
-        label: label,
+        label: Transaction.type_label_for(normalized),
         count: count,
         key: normalized
       }
@@ -94,12 +88,6 @@ class TransactionMetrics
 
   def expense_relation
     @expense_relation ||= relation.where(transaction_type: Transaction.transaction_types[:expense])
-  end
-
-  def normalized_transaction_type_key(value)
-    return value if value.is_a?(String) && value.present?
-
-    Transaction.transaction_types.key(value)
   end
 
   def percentage(value)

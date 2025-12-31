@@ -2,7 +2,7 @@ require "application_system_test_case"
 
 class EmailsTest < ApplicationSystemTestCase
   test "viewing emails index" do
-    user = User.create!(email_address: "email_test@example.com", password: "password")
+    user = User.create!(email_address: "email_test@example.com", password: "password", email_verified_at: Time.current)
     account = EmailAccount.create!(
       user: user,
       email_address: user.email_address,
@@ -28,7 +28,7 @@ class EmailsTest < ApplicationSystemTestCase
   end
 
   test "viewing a single email" do
-    user = User.create!(email_address: "email_show_test@example.com", password: "password")
+    user = User.create!(email_address: "email_show_test@example.com", password: "password", email_verified_at: Time.current)
     account = EmailAccount.create!(
       user: user,
       email_address: user.email_address,

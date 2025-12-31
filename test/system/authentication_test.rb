@@ -8,7 +8,7 @@ class AuthenticationTest < ApplicationSystemTestCase
   end
 
   test "user can log in with valid credentials" do
-    user = User.create!(email_address: "system_test@example.com", password: "password")
+    user = User.create!(email_address: "system_test@example.com", password: "password", email_verified_at: Time.current)
 
     visit new_session_url
     fill_in "email_address", with: user.email_address

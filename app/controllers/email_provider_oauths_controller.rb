@@ -45,7 +45,7 @@ class EmailProviderOauthsController < ApplicationController
 
     acct.save!
 
-    redirect_to root, notice: "Google account linked."
+    redirect_to root_path, notice: "Google account linked."
   rescue Signet::AuthorizationError
     redirect_to root_path, alert: "Authorization failed."
   end
@@ -58,8 +58,7 @@ class EmailProviderOauthsController < ApplicationController
       authorization_uri: "https://accounts.google.com/o/oauth2/v2/auth",
       token_credential_uri: "https://oauth2.googleapis.com/token",
       scope: SCOPES,
-      # TODO: Change the hardcoded URL
-      redirect_uri: "http://localhost:3000/oauth/google/callback",
+      redirect_uri: oauth_callback_url(provider: "google"),
       code: code,
       additional_parameters: {
         access_type: "offline",

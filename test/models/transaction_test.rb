@@ -249,4 +249,102 @@ class TransactionTest < ActiveSupport::TestCase
     assert_equal "expense", transactions(:amazon_purchase).transaction_type_select_value
     assert_equal "investment", transactions(:investment).transaction_type_select_value
   end
+
+  # === Status Label ===
+
+  test "status_label returns status when present" do
+    transaction = transactions(:amazon_purchase)
+    transaction.status = "parsed"
+    assert_equal "parsed", transaction.status_label
+  end
+
+  test "status_label returns Unlabeled when status is nil" do
+    transaction = transactions(:amazon_purchase)
+    transaction.status = nil
+    assert_equal "Unlabeled", transaction.status_label
+  end
+
+  test "status_label returns Unlabeled when status is blank" do
+    transaction = transactions(:amazon_purchase)
+    transaction.status = ""
+    assert_equal "Unlabeled", transaction.status_label
+  end
+
+  # === Class Methods for Type Normalization ===
+
+  test "normalize_type_key returns string key when given string" do
+    assert_equal "expense", Transaction.normalize_type_key("expense")
+    assert_equal "investment", Transaction.normalize_type_key("investment")
+  end
+
+  test "normalize_type_key converts integer to string key" do
+    assert_equal "expense", Transaction.normalize_type_key(0)
+    assert_equal "investment", Transaction.normalize_type_key(1)
+    assert_equal "transfer", Transaction.normalize_type_key(2)
+    assert_equal "loan", Transaction.normalize_type_key(3)
+  end
+
+  test "type_label_for returns human readable label" do
+    assert_equal "Expense", Transaction.type_label_for("expense")
+    assert_equal "Investment", Transaction.type_label_for("investment")
+    assert_equal "Transfer", Transaction.type_label_for("transfer")
+    assert_equal "Loan", Transaction.type_label_for("loan")
+  end
+
+  test "type_label_for returns Unknown for nil" do
+    assert_equal "Unknown", Transaction.type_label_for(nil)
+  end
+
+  test "type_label_for returns Unknown for blank string" do
+    assert_equal "Unknown", Transaction.type_label_for("")
+  end
+
+  test "type_label_for humanizes unknown types" do
+    assert_equal "Some new type", Transaction.type_label_for("some_new_type")
+  end
+
+  # === Search Edge Cases ===
+
+  test "search handles special SQL characters safely" do
+    # These should not cause SQL errors
+    assert_nothing_raised do
+      Transaction.search("%")
+      Transaction.search("_")
+      Transaction.search("'")
+      Transaction.search("\\")
+      Transaction.search("%;DROP TABLE transactions;--")
+    end
+  end
+
+  test "search with very long query does not error" do
+    long_query = "a" * 1000
+    assert_nothing_raised do
+      Transaction.search(long_query)
+    end
+  end
+
+  test "search with unicode characters works" do
+    results = Transaction.search("₹")
+    assert_kind_of ActiveRecord::Relation, results
+  end
+
+  test "search matches partial merchant names" do
+    results = Transaction.search("Amaz")
+    assert results.any? { |t| t.merchant.include?("Amazon") }
+  end
+
+  # === Amounts and Currency ===
+
+  test "amount_cents can store large values" do
+    transaction = transactions(:amazon_purchase)
+    transaction.amount_cents = 999_999_999_99 # ~10 billion cents
+    transaction.save!
+    transaction.reload
+    assert_equal 999_999_999_99, transaction.amount_cents
+  end
+
+  test "currency is stored as string" do
+    transaction = transactions(:amazon_purchase)
+    assert_equal "INR", transaction.currency
+  end
 end

@@ -1,10 +1,10 @@
 require "test_helper"
 
-class TransactionMetricsTest < ActiveSupport::TestCase
+class Transaction::MetricsTest < ActiveSupport::TestCase
   setup do
     @user = users(:one)
     @relation = Transaction.for_user(@user.id)
-    @metrics = TransactionMetrics.new(@relation)
+    @metrics = Transaction::Metrics.new(@relation)
   end
 
   # === Basic Counts ===
@@ -38,7 +38,7 @@ class TransactionMetricsTest < ActiveSupport::TestCase
 
   test "average_amount_cents returns zero when no expenses" do
     empty_relation = Transaction.none
-    metrics = TransactionMetrics.new(empty_relation)
+    metrics = Transaction::Metrics.new(empty_relation)
     assert_equal 0, metrics.average_amount_cents
   end
 
@@ -49,7 +49,7 @@ class TransactionMetricsTest < ActiveSupport::TestCase
   end
 
   test "dominant_currency returns default when no currencies" do
-    empty_metrics = TransactionMetrics.new(Transaction.none)
+    empty_metrics = Transaction::Metrics.new(Transaction.none)
     assert_equal "₹", empty_metrics.dominant_currency
   end
 
@@ -80,7 +80,7 @@ class TransactionMetricsTest < ActiveSupport::TestCase
   end
 
   test "linked_email_percentage returns zero when total is zero" do
-    empty_metrics = TransactionMetrics.new(Transaction.none)
+    empty_metrics = Transaction::Metrics.new(Transaction.none)
     assert_equal 0, empty_metrics.linked_email_percentage
   end
 
@@ -102,7 +102,7 @@ class TransactionMetricsTest < ActiveSupport::TestCase
     transaction = transactions(:amazon_purchase)
     transaction.update_column(:status, nil)
 
-    metrics = TransactionMetrics.new(Transaction.where(id: transaction.id))
+    metrics = Transaction::Metrics.new(Transaction.where(id: transaction.id))
     counts = metrics.status_counts
 
     assert counts.any? { |status, _| status == "Unlabeled" }
@@ -155,7 +155,7 @@ class TransactionMetricsTest < ActiveSupport::TestCase
 
   test "works with filtered relation" do
     filtered = @relation.where(category: "groceries")
-    metrics = TransactionMetrics.new(filtered)
+    metrics = Transaction::Metrics.new(filtered)
 
     assert metrics.total <= @metrics.total
     assert_respond_to metrics, :total_amount_cents
@@ -164,7 +164,7 @@ class TransactionMetricsTest < ActiveSupport::TestCase
 
   test "works with search filtered relation" do
     searched = @relation.search("Amazon")
-    metrics = TransactionMetrics.new(searched)
+    metrics = Transaction::Metrics.new(searched)
 
     assert metrics.total > 0
     assert_respond_to metrics, :dominant_currency
@@ -173,7 +173,7 @@ class TransactionMetricsTest < ActiveSupport::TestCase
   # === Edge Cases ===
 
   test "handles empty relation" do
-    empty_metrics = TransactionMetrics.new(Transaction.none)
+    empty_metrics = Transaction::Metrics.new(Transaction.none)
 
     assert_equal 0, empty_metrics.total
     assert_equal 0, empty_metrics.total_amount_cents

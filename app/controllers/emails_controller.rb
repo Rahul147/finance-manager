@@ -6,7 +6,7 @@ class EmailsController < ApplicationController
     @emails = scoped_emails
       .includes(:financial_transaction)
       .ordered_newest
-    @metrics = EmailMetrics.new(scoped_emails)
+    @metrics = Email::Metrics.new(scoped_emails)
 
     render :index, layout: false if turbo_frame_request?
   end

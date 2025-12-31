@@ -1,4 +1,4 @@
-class DashboardSummary
+class User::DashboardSummary
   DEFAULT_CURRENCY = "₹".freeze
   TOP_LIMIT = 5
 
@@ -85,15 +85,9 @@ class DashboardSummary
       counts = transactions_scope.group(:transaction_type).count
 
       counts.map do |raw_value, count|
-        key = normalized_transaction_type_key(raw_value)
-        label = if key.present?
-          Transaction::TRANSACTION_TYPE_LABELS[key.to_sym] || key.titleize
-        else
-          "Unknown"
-        end
-
+        key = Transaction.normalize_type_key(raw_value)
         {
-          label: label,
+          label: Transaction.type_label_for(key),
           count: count,
           percentage: percentage(count)
         }
@@ -185,12 +179,6 @@ class DashboardSummary
 
   def expense_transactions_scope
     @expense_transactions_scope ||= transactions_scope.where(transaction_type: Transaction.transaction_types[:expense])
-  end
-
-  def normalized_transaction_type_key(value)
-    return value if value.is_a?(String) && value.present?
-
-    Transaction.transaction_types.key(value)
   end
 
   def emails_scope

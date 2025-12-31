@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_11_23_113546) do
+ActiveRecord::Schema[8.1].define(version: 2025_12_31_095216) do
   create_table "email_accounts", force: :cascade do |t|
     t.text "access_token"
     t.datetime "created_at", null: false
@@ -36,7 +36,7 @@ ActiveRecord::Schema[8.1].define(version: 2025_11_23_113546) do
     t.string "from_address"
     t.text "headers"
     t.string "message_id"
-    t.boolean "processed"
+    t.boolean "processed", default: false, null: false
     t.datetime "sent_at"
     t.text "snippet"
     t.string "subject"
@@ -44,6 +44,7 @@ ActiveRecord::Schema[8.1].define(version: 2025_11_23_113546) do
     t.string "to_address"
     t.datetime "updated_at", null: false
     t.integer "user_id", null: false
+    t.index ["email_account_id", "message_id"], name: "index_emails_on_email_account_id_and_message_id", unique: true
     t.index ["email_account_id"], name: "index_emails_on_email_account_id"
     t.index ["user_id"], name: "index_emails_on_user_id"
   end
@@ -79,6 +80,7 @@ ActiveRecord::Schema[8.1].define(version: 2025_11_23_113546) do
   create_table "users", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "email_address", null: false
+    t.datetime "email_verified_at"
     t.string "password_digest", null: false
     t.datetime "updated_at", null: false
     t.index ["email_address"], name: "index_users_on_email_address", unique: true
