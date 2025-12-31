@@ -2,7 +2,7 @@ require "application_system_test_case"
 
 class TransactionsTest < ApplicationSystemTestCase
   test "viewing transactions index" do
-    user = User.create!(email_address: "trans_test@example.com", password: "password")
+    user = User.create!(email_address: "trans_test@example.com", password: "password", email_verified_at: Time.current)
     account = EmailAccount.create!(
       user: user,
       email_address: user.email_address,
@@ -35,7 +35,7 @@ class TransactionsTest < ApplicationSystemTestCase
   end
 
   test "viewing a single transaction" do
-    user = User.create!(email_address: "trans_show_test@example.com", password: "password")
+    user = User.create!(email_address: "trans_show_test@example.com", password: "password", email_verified_at: Time.current)
     account = EmailAccount.create!(
       user: user,
       email_address: user.email_address,

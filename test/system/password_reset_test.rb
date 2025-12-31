@@ -7,7 +7,7 @@ class PasswordResetTest < ApplicationSystemTestCase
   end
 
   test "requesting password reset shows confirmation" do
-    user = User.create!(email_address: "reset_test@example.com", password: "password")
+    user = User.create!(email_address: "reset_test@example.com", password: "password", email_verified_at: Time.current)
 
     visit new_password_url
     fill_in "email_address", with: user.email_address

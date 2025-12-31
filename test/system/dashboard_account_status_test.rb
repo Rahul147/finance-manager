@@ -2,7 +2,7 @@ require "application_system_test_case"
 
 class DashboardAccountStatusTest < ApplicationSystemTestCase
   test "dashboard shows active account status" do
-    user = User.create!(email_address: "status_test@example.com", password: "password")
+    user = User.create!(email_address: "status_test@example.com", password: "password", email_verified_at: Time.current)
     EmailAccount.create!(
       user: user,
       email_address: "active@gmail.com",
@@ -21,7 +21,7 @@ class DashboardAccountStatusTest < ApplicationSystemTestCase
   end
 
   test "dashboard shows inactive account status" do
-    user = User.create!(email_address: "inactive_test@example.com", password: "password")
+    user = User.create!(email_address: "inactive_test@example.com", password: "password", email_verified_at: Time.current)
     EmailAccount.create!(
       user: user,
       email_address: "inactive@gmail.com",
@@ -40,7 +40,7 @@ class DashboardAccountStatusTest < ApplicationSystemTestCase
   end
 
   test "dashboard shows multiple accounts with different statuses" do
-    user = User.create!(email_address: "multi_status@example.com", password: "password")
+    user = User.create!(email_address: "multi_status@example.com", password: "password", email_verified_at: Time.current)
     EmailAccount.create!(
       user: user,
       email_address: "working@gmail.com",
