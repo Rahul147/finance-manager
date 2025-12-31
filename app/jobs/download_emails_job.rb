@@ -8,7 +8,7 @@ class DownloadEmailsJob < ApplicationJob
       # TODO: Add other providers
       next unless acct.provider == "google"
 
-      GoogleGmail.ingest_latest(
+      Email::Gmail.ingest_latest(
         acct,
         senders: default_senders,
         days: days,

@@ -5,8 +5,8 @@ class TransactionsController < ApplicationController
     @transactions = scoped_transactions
       .includes(:email)
       .ordered_newest
-    @metrics = TransactionMetrics.new(scoped_transactions)
-    @type_metrics = TransactionMetrics.new(search_filtered_scope)
+    @metrics = Transaction::Metrics.new(scoped_transactions)
+    @type_metrics = Transaction::Metrics.new(search_filtered_scope)
     @selected_transaction_type = transaction_type_filter
 
     render :index, layout: false if turbo_frame_request?

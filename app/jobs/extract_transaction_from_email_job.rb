@@ -10,7 +10,7 @@ class ExtractTransactionFromEmailJob < ApplicationJob
     email = Email.find(email_id)
     Rails.logger.info("ExtractTransactionFromEmailJob email_id=#{email_id} subject=#{email.subject.inspect}")
 
-    transaction = TransactionExtractor.extract!(email)
+    transaction = Transaction::Extractor.extract_from(email)
     if transaction&.persisted?
       email.update!(processed: true)
     else

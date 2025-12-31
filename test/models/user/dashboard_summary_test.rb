@@ -1,9 +1,9 @@
 require "test_helper"
 
-class DashboardSummaryTest < ActiveSupport::TestCase
+class User::DashboardSummaryTest < ActiveSupport::TestCase
   setup do
     @user = users(:one)
-    @summary = DashboardSummary.new(user: @user)
+    @summary = User::DashboardSummary.new(user: @user)
   end
 
   # === Initialization ===
@@ -64,7 +64,7 @@ class DashboardSummaryTest < ActiveSupport::TestCase
     # Delete user two's expense transactions for this test
     Transaction.for_user(empty_user.id).expenses.delete_all
 
-    summary = DashboardSummary.new(user: empty_user)
+    summary = User::DashboardSummary.new(user: empty_user)
     assert_equal 0.0, summary.average_transaction_cents
   end
 
@@ -76,7 +76,7 @@ class DashboardSummaryTest < ActiveSupport::TestCase
   test "dominant_currency returns default when no currencies" do
     # Create a summary for user with no transactions
     Transaction.for_user(@user.id).delete_all
-    summary = DashboardSummary.new(user: @user)
+    summary = User::DashboardSummary.new(user: @user)
     assert_equal "₹", summary.dominant_currency
   end
 
@@ -196,7 +196,7 @@ class DashboardSummaryTest < ActiveSupport::TestCase
   test "handles user with no data" do
     # Create a new user with no associated data
     new_user = User.create!(email_address: "empty@example.com", password: "password")
-    summary = DashboardSummary.new(user: new_user)
+    summary = User::DashboardSummary.new(user: new_user)
 
     assert_equal 0, summary.total_transactions
     assert_equal 0, summary.lifetime_spend_cents

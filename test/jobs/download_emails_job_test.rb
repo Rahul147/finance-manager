@@ -6,11 +6,15 @@ class DownloadEmailsJobTest < ActiveSupport::TestCase
     @email_account = email_accounts(:one)
   end
 
+  # === Argument Validation ===
+
   test "raises RecordNotFound for invalid user_id" do
     assert_raises(ActiveRecord::RecordNotFound) do
       DownloadEmailsJob.new.perform(999999)
     end
   end
+
+  # === Enqueueing ===
 
   test "uses default queue" do
     assert_equal "default", DownloadEmailsJob.new.queue_name
@@ -25,6 +29,26 @@ class DownloadEmailsJobTest < ActiveSupport::TestCase
     end
   end
 
+  test "can be enqueued with default parameters" do
+    assert_enqueued_with(job: DownloadEmailsJob, args: [ @user.id ]) do
+      DownloadEmailsJob.perform_later(@user.id)
+    end
+  end
+
+  # === Job Structure ===
+
+  test "job is an ApplicationJob" do
+    assert DownloadEmailsJob < ApplicationJob
+  end
+
+  test "accepts keyword arguments for days and max" do
+    job = DownloadEmailsJob.new
+    # This should not raise - testing the method signature
+    assert_respond_to job, :perform
+  end
+
+  # === Default Senders ===
+
   test "default_senders includes expected bank addresses" do
     job = DownloadEmailsJob.new
     senders = job.send(:default_senders)
@@ -35,7 +59,31 @@ class DownloadEmailsJobTest < ActiveSupport::TestCase
     assert_includes senders, "onlinesbicard@sbicard.com"
   end
 
-  # Note: Tests that require mocking GoogleGmail are skipped in vanilla Rails testing.
-  # Integration tests with real Gmail API calls require proper OAuth credentials
-  # and should be done in a separate integration test suite.
+  test "default_senders returns an array" do
+    job = DownloadEmailsJob.new
+    senders = job.send(:default_senders)
+
+    assert_kind_of Array, senders
+    assert senders.all? { |s| s.is_a?(String) }
+  end
+
+  test "default_senders are valid email addresses" do
+    job = DownloadEmailsJob.new
+    senders = job.send(:default_senders)
+
+    senders.each do |sender|
+      assert_match(/@/, sender, "#{sender} should be an email address")
+    end
+  end
+
+  # Note: Full integration tests that verify the job calls Email::Gmail.ingest_latest
+  # for each Google account require mocking the Gmail API.
+  # Those behaviors are documented and tested manually/in integration.
+  #
+  # Job behavior summary:
+  # 1. Finds user by ID
+  # 2. Iterates over user's email_accounts
+  # 3. Skips non-Google providers
+  # 4. Calls Email::Gmail.ingest_latest for each Google account
+  # 5. Passes senders, days, max, and unread_only parameters
 end

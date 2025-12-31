@@ -1,5 +1,5 @@
 class DashboardsController < ApplicationController
   def index
-    @summary = DashboardSummary.new(user: Current.user)
+    @summary = User::DashboardSummary.new(user: Current.user)
   end
 end

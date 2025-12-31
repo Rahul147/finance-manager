@@ -1,4 +1,4 @@
-class EmailMetrics
+class Email::Metrics
   DEFAULT_TOP_LIMIT = 4
 
   def initialize(relation)

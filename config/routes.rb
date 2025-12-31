@@ -1,10 +1,8 @@
 Rails.application.routes.draw do
-  get "transactions/index"
-  get "transactions/show"
   resource :session
   resources :passwords, param: :token
 
-  resources :emails, only: [ :index, :show ], path: "email"
+  resources :emails, only: [ :index, :show ]
   resources :transactions, only: [ :index, :show, :update ]
   get "dashboard", to: "dashboards#index", as: :dashboard
 
