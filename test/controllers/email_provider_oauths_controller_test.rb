@@ -4,6 +4,10 @@ class EmailProviderOauthsControllerTest < ActionDispatch::IntegrationTest
   setup do
     @user = users(:one)
     sign_in_as(@user)
+
+    # Set test credentials for OAuth client
+    ENV["GOOGLE_API_CLIENT_ID"] ||= "test-client-id.apps.googleusercontent.com"
+    ENV["GOOGLE_API_CLIENT_SECRET"] ||= "test-client-secret"
   end
 
   # === Start Action ===
