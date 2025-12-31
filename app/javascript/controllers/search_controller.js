@@ -3,7 +3,7 @@ import { Controller } from "@hotwired/stimulus";
 // Connects to data-controller="search"
 export default class extends Controller {
   static values = { delay: { type: Number, default: 300 } };
-  static targets = ["input"];
+  static targets = ["input", "transactionType"];
 
   connect() {
     this._submit = this._debounce(
@@ -26,12 +26,23 @@ export default class extends Controller {
   _syncUrl() {
     try {
       const url = new URL(window.location);
+
+      // Sync search query
       const q = this.hasInputTarget ? this.inputTarget.value : "";
       if (q && q.length > 0) {
         url.searchParams.set("q", q);
       } else {
         url.searchParams.delete("q");
       }
+
+      // Preserve transaction_type filter
+      const transactionType = this.hasTransactionTypeTarget ? this.transactionTypeTarget.value : "";
+      if (transactionType && transactionType.length > 0) {
+        url.searchParams.set("transaction_type", transactionType);
+      } else {
+        url.searchParams.delete("transaction_type");
+      }
+
       window.history.replaceState({}, "", url);
     } catch (e) {
       // no-op
